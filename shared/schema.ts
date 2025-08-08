@@ -224,6 +224,32 @@ export const insertNotificationSchema = createInsertSchema(notifications).omit({
 // Types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
+
+// Manual project entry schema
+export const manualProjects = pgTable("manual_projects", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: varchar("name").notNull(),
+  industry: varchar("industry").notNull(),
+  domain: varchar("domain"),
+  client: varchar("client"),
+  status: varchar("status").default("planning"), // planning, in-progress, testing, completed, on-hold
+  startDate: timestamp("start_date"),
+  endDate: timestamp("end_date"),
+  budget: decimal("budget", { precision: 12, scale: 2 }),
+  actualCost: decimal("actual_cost", { precision: 12, scale: 2 }),
+  teamSize: integer("team_size"),
+  progress: integer("progress").default(0),
+  priority: varchar("priority").default("medium"), // low, medium, high
+  riskLevel: varchar("risk_level").default("low"), // low, medium, high
+  location: varchar("location"),
+  description: text("description"),
+  technologies: varchar("technologies").array(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export type ManualProject = typeof manualProjects.$inferSelect;
+export type InsertManualProject = typeof manualProjects.$inferInsert;
 export type InsertUser = z.infer<typeof insertUserSchema>;
 
 export type Client = typeof clients.$inferSelect;

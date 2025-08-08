@@ -12,23 +12,80 @@ import {
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Mock data routes for dashboard (no auth required)
-  app.get('/api/projects/overview', async (req, res) => {
+  // Real project data routes
+  app.get('/api/projects/real-data', async (req, res) => {
+    const { realProjectsData, industryStats } = await import('./data/realProjects');
     res.json({
-      total: 24,
-      active: 12,
-      completed: 8,
-      onHold: 4
+      projects: realProjectsData,
+      stats: industryStats,
+      summary: {
+        total: realProjectsData.length,
+        active: realProjectsData.filter(p => p.status === 'in-progress').length,
+        completed: realProjectsData.filter(p => p.status === 'completed').length,
+        testing: realProjectsData.filter(p => p.status === 'testing').length,
+        planning: realProjectsData.filter(p => p.status === 'planning').length
+      }
     });
   });
 
-  app.get('/api/team/stats', async (req, res) => {
-    res.json({
-      totalMembers: 28,
-      activeMembers: 24,
-      utilization: 87,
-      efficiency: 92
+  app.get('/api/projects/analytics', async (req, res) => {
+    const { realProjectsData } = await import('./data/realProjects');
+    
+    // Calculate analytics from real data
+    const industryBreakdown = realProjectsData.reduce((acc, project) => {
+      acc[project.industry] = (acc[project.industry] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const budgetAnalysis = realProjectsData.map(p => ({
+      name: p.name.substring(0, 15) + '...',
+      estimated: p.budget,
+      actual: p.actualCost,
+      efficiency: Math.round((p.actualCost / p.budget) * 100)
+    }));
+
+    const timelineData = realProjectsData.map(p => {
+      const start = new Date(p.startDate);
+      const end = new Date(p.endDate);
+      const duration = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+      return {
+        name: p.name.substring(0, 20),
+        duration,
+        progress: p.progress,
+        industry: p.industry
+      };
     });
+
+    res.json({
+      industryBreakdown,
+      budgetAnalysis,
+      timelineData,
+      summary: {
+        totalBudget: realProjectsData.reduce((sum, p) => sum + p.budget, 0),
+        totalActualCost: realProjectsData.reduce((sum, p) => sum + p.actualCost, 0),
+        avgTeamSize: Math.round(realProjectsData.reduce((sum, p) => sum + p.teamSize, 0) / realProjectsData.length),
+        avgProgress: Math.round(realProjectsData.reduce((sum, p) => sum + p.progress, 0) / realProjectsData.length)
+      }
+    });
+  });
+
+  // Manual project entry routes
+  app.post('/api/projects/manual', async (req, res) => {
+    try {
+      const projectData = req.body;
+      // For now, store in memory (can be extended to use database)
+      const newProject = {
+        id: `MANUAL_${Date.now()}`,
+        ...projectData,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      
+      // In a real implementation, save to database
+      res.json({ success: true, project: newProject });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to create project' });
+    }
   });
 
   // Client routes
