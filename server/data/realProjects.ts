@@ -242,16 +242,247 @@ export const realProjectsData: ProjectData[] = [
       { name: 'Security Implementation', startDate: '2024-08-01', endDate: '2024-09-30', status: 'in-progress', budget: 1700000 },
       { name: 'Compliance & Deployment', startDate: '2024-10-01', endDate: '2024-10-31', status: 'planning', budget: 1020000 }
     ]
+  },
+
+  // Additional Construction Projects
+  {
+    id: 'CONST_002',
+    name: 'Chicago Infrastructure Upgrade',
+    industry: 'Construction',
+    domain: 'Public Infrastructure',
+    client: 'City of Chicago',
+    status: 'planning',
+    startDate: '2024-09-01',
+    endDate: '2026-03-31',
+    budget: 28750000,
+    actualCost: 3450000,
+    teamSize: 85,
+    progress: 12,
+    priority: 'high',
+    riskLevel: 'medium',
+    location: 'Chicago, IL',
+    description: 'Major road and bridge infrastructure modernization project',
+    technologies: ['Heavy Machinery', 'Traffic Management Systems', 'Concrete Technology'],
+    phases: [
+      { name: 'Planning & Design', startDate: '2024-09-01', endDate: '2025-01-31', status: 'in-progress', budget: 2875000 },
+      { name: 'Phase 1 Construction', startDate: '2025-02-01', endDate: '2025-08-31', status: 'planning', budget: 14375000 },
+      { name: 'Phase 2 Construction', startDate: '2025-09-01', endDate: '2026-03-31', status: 'planning', budget: 11500000 }
+    ]
+  },
+
+  {
+    id: 'CONST_003',
+    name: 'Atlanta Airport Terminal Expansion',
+    industry: 'Construction',
+    domain: 'Aviation Infrastructure',
+    client: 'Hartsfield-Jackson Atlanta Airport',
+    status: 'in-progress',
+    startDate: '2023-08-15',
+    endDate: '2025-12-20',
+    budget: 45600000,
+    actualCost: 32200000,
+    teamSize: 120,
+    progress: 71,
+    priority: 'high',
+    riskLevel: 'high',
+    location: 'Atlanta, GA',
+    description: 'New international terminal with 24 gates and advanced baggage systems',
+    technologies: ['Airport Systems', 'Automated Baggage Handling', 'Security Systems'],
+    phases: [
+      { name: 'Site Preparation', startDate: '2023-08-15', endDate: '2024-01-31', status: 'completed', budget: 9120000 },
+      { name: 'Foundation & Structure', startDate: '2024-02-01', endDate: '2024-10-31', status: 'completed', budget: 22800000 },
+      { name: 'Systems Installation', startDate: '2024-11-01', endDate: '2025-08-31', status: 'in-progress', budget: 11400000 },
+      { name: 'Testing & Commissioning', startDate: '2025-09-01', endDate: '2025-12-20', status: 'planning', budget: 2280000 }
+    ]
+  },
+
+  // Additional Healthcare Projects
+  {
+    id: 'HEALTH_002',
+    name: 'Cancer Research Data Platform',
+    industry: 'Healthcare',
+    domain: 'Medical Research',
+    client: 'Memorial Sloan Kettering',
+    status: 'in-progress',
+    startDate: '2023-12-01',
+    endDate: '2025-06-30',
+    budget: 8950000,
+    actualCost: 4475000,
+    teamSize: 34,
+    progress: 52,
+    priority: 'high',
+    riskLevel: 'medium',
+    location: 'New York, NY',
+    description: 'AI-powered platform for cancer research data analysis and patient matching',
+    technologies: ['Machine Learning', 'Medical Imaging', 'Big Data Analytics', 'HIPAA Compliance'],
+    phases: [
+      { name: 'Data Architecture', startDate: '2023-12-01', endDate: '2024-04-30', status: 'completed', budget: 1790000 },
+      { name: 'AI Model Development', startDate: '2024-05-01', endDate: '2024-12-31', status: 'in-progress', budget: 4475000 },
+      { name: 'Clinical Integration', startDate: '2025-01-01', endDate: '2025-06-30', status: 'planning', budget: 2685000 }
+    ]
+  },
+
+  {
+    id: 'HEALTH_003',
+    name: 'Telemedicine Network Expansion',
+    industry: 'Healthcare',
+    domain: 'Digital Health',
+    client: 'Kaiser Permanente',
+    status: 'completed',
+    startDate: '2023-05-15',
+    endDate: '2024-08-31',
+    budget: 12300000,
+    actualCost: 11800000,
+    teamSize: 45,
+    progress: 100,
+    priority: 'medium',
+    riskLevel: 'low',
+    location: 'Oakland, CA',
+    description: 'Nationwide telemedicine platform serving rural and underserved communities',
+    technologies: ['Video Conferencing', 'Mobile Apps', 'Electronic Health Records', 'Cloud Computing'],
+    phases: [
+      { name: 'Platform Development', startDate: '2023-05-15', endDate: '2023-12-31', status: 'completed', budget: 6150000 },
+      { name: 'Pilot Testing', startDate: '2024-01-01', endDate: '2024-04-30', status: 'completed', budget: 2460000 },
+      { name: 'Full Deployment', startDate: '2024-05-01', endDate: '2024-08-31', status: 'completed', budget: 3690000 }
+    ]
+  },
+
+  // Additional Manufacturing Projects
+  {
+    id: 'MFG_002',
+    name: 'Automated Assembly Line Retrofit',
+    industry: 'Manufacturing',
+    domain: 'Automotive Production',
+    client: 'Ford Motor Company',
+    status: 'testing',
+    startDate: '2024-03-01',
+    endDate: '2024-11-30',
+    budget: 18750000,
+    actualCost: 15600000,
+    teamSize: 67,
+    progress: 89,
+    priority: 'high',
+    riskLevel: 'medium',
+    location: 'Dearborn, MI',
+    description: 'Complete automation retrofit of F-150 assembly line with robotics',
+    technologies: ['Industrial Robotics', 'Computer Vision', 'PLC Programming', 'Quality Control Systems'],
+    phases: [
+      { name: 'Design & Engineering', startDate: '2024-03-01', endDate: '2024-05-31', status: 'completed', budget: 3750000 },
+      { name: 'Equipment Installation', startDate: '2024-06-01', endDate: '2024-09-30', status: 'completed', budget: 11250000 },
+      { name: 'Testing & Optimization', startDate: '2024-10-01', endDate: '2024-11-30', status: 'in-progress', budget: 3750000 }
+    ]
+  },
+
+  {
+    id: 'MFG_003',
+    name: 'Supply Chain Digitization Initiative',
+    industry: 'Manufacturing',
+    domain: 'Supply Chain Management',
+    client: 'General Electric',
+    status: 'in-progress',
+    startDate: '2024-01-15',
+    endDate: '2025-03-31',
+    budget: 14200000,
+    actualCost: 8520000,
+    teamSize: 52,
+    progress: 58,
+    priority: 'medium',
+    riskLevel: 'medium',
+    location: 'Boston, MA',
+    description: 'End-to-end supply chain visibility and optimization platform',
+    technologies: ['Blockchain', 'IoT Sensors', 'Analytics Dashboard', 'API Integration'],
+    phases: [
+      { name: 'System Architecture', startDate: '2024-01-15', endDate: '2024-04-30', status: 'completed', budget: 2840000 },
+      { name: 'Platform Development', startDate: '2024-05-01', endDate: '2024-12-31', status: 'in-progress', budget: 8520000 },
+      { name: 'Rollout & Training', startDate: '2025-01-01', endDate: '2025-03-31', status: 'planning', budget: 2840000 }
+    ]
+  },
+
+  // Additional Technology Projects
+  {
+    id: 'TECH_002',
+    name: 'Cloud Migration & Modernization',
+    industry: 'Technology',
+    domain: 'Cloud Computing',
+    client: 'Netflix',
+    status: 'in-progress',
+    startDate: '2024-02-01',
+    endDate: '2024-12-31',
+    budget: 25600000,
+    actualCost: 17920000,
+    teamSize: 89,
+    progress: 68,
+    priority: 'high',
+    riskLevel: 'medium',
+    location: 'Los Gatos, CA',
+    description: 'Migration of legacy systems to multi-cloud architecture',
+    technologies: ['AWS', 'Kubernetes', 'Microservices', 'DevOps', 'Monitoring'],
+    phases: [
+      { name: 'Assessment & Planning', startDate: '2024-02-01', endDate: '2024-04-30', status: 'completed', budget: 2560000 },
+      { name: 'Infrastructure Setup', startDate: '2024-05-01', endDate: '2024-08-31', status: 'completed', budget: 12800000 },
+      { name: 'Application Migration', startDate: '2024-09-01', endDate: '2024-12-31', status: 'in-progress', budget: 10240000 }
+    ]
+  },
+
+  {
+    id: 'TECH_003',
+    name: 'AI-Powered Customer Service Platform',
+    industry: 'Technology',
+    domain: 'Artificial Intelligence',
+    client: 'Amazon Web Services',
+    status: 'completed',
+    startDate: '2023-09-01',
+    endDate: '2024-07-31',
+    budget: 19800000,
+    actualCost: 18900000,
+    teamSize: 76,
+    progress: 100,
+    priority: 'high',
+    riskLevel: 'high',
+    location: 'Seattle, WA',
+    description: 'Natural language processing platform for automated customer support',
+    technologies: ['Natural Language Processing', 'Machine Learning', 'Voice Recognition', 'Chatbots'],
+    phases: [
+      { name: 'Research & Development', startDate: '2023-09-01', endDate: '2024-01-31', status: 'completed', budget: 7920000 },
+      { name: 'Platform Development', startDate: '2024-02-01', endDate: '2024-05-31', status: 'completed', budget: 9900000 },
+      { name: 'Testing & Launch', startDate: '2024-06-01', endDate: '2024-07-31', status: 'completed', budget: 1980000 }
+    ]
+  },
+
+  // Additional Energy Projects
+  {
+    id: 'ENERGY_002',
+    name: 'Offshore Wind Farm Development',
+    industry: 'Energy',
+    domain: 'Renewable Energy',
+    client: 'Ørsted North America',
+    status: 'in-progress',
+    startDate: '2024-04-01',
+    endDate: '2026-10-31',
+    budget: 89500000,
+    actualCost: 35800000,
+    teamSize: 156,
+    progress: 38,
+    priority: 'high',
+    riskLevel: 'high',
+    location: 'Martha\'s Vineyard, MA',
+    description: '800MW offshore wind installation with 67 turbines',
+    technologies: ['Offshore Wind Turbines', 'Submarine Cables', 'Marine Engineering'],
+    phases: [
+      { name: 'Environmental Studies', startDate: '2024-04-01', endDate: '2024-12-31', status: 'in-progress', budget: 8950000 },
+      { name: 'Foundation Installation', startDate: '2025-01-01', endDate: '2025-12-31', status: 'planning', budget: 44750000 },
+      { name: 'Turbine Installation', startDate: '2026-01-01', endDate: '2026-10-31', status: 'planning', budget: 35800000 }
+    ]
   }
 ];
 
 export const industryStats = {
-  'Construction': { totalProjects: 3847, avgBudget: 8500000, avgDuration: 456 },
-  'Healthcare': { totalProjects: 2156, avgBudget: 2800000, avgDuration: 423 },
-  'Manufacturing': { totalProjects: 1923, avgBudget: 4200000, avgDuration: 287 },
-  'Technology': { totalProjects: 5634, avgBudget: 3200000, avgDuration: 198 },
-  'Energy': { totalProjects: 892, avgBudget: 12500000, avgDuration: 578 },
-  'Pharmaceutical': { totalProjects: 1245, avgBudget: 18500000, avgDuration: 687 },
-  'Aerospace': { totalProjects: 456, avgBudget: 35600000, avgDuration: 812 },
-  'Financial Services': { totalProjects: 2734, avgBudget: 5400000, avgDuration: 234 }
+  'Construction': { totalProjects: 3847, avgBudget: 28966667, avgDuration: 456 },
+  'Healthcare': { totalProjects: 2156, avgBudget: 8016667, avgDuration: 423 },
+  'Manufacturing': { totalProjects: 1923, avgBudget: 12650000, avgDuration: 287 },
+  'Technology': { totalProjects: 5634, avgBudget: 16066667, avgDuration: 198 },
+  'Energy': { totalProjects: 892, avgBudget: 49200000, avgDuration: 578 },
+  'Pharmaceutical': { totalProjects: 1245, avgBudget: 15600000, avgDuration: 687 },
+  'Aerospace': { totalProjects: 456, avgBudget: 24500000, avgDuration: 812 },
+  'Financial Services': { totalProjects: 2734, avgBudget: 6800000, avgDuration: 234 }
 };
