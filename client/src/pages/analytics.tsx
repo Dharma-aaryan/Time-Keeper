@@ -6,6 +6,7 @@ import ProjectTimelineChart from "@/components/ProjectTimelineChart";
 import ManualProjectForm from "@/components/ManualProjectForm";
 import RealDataCharts from "@/components/RealDataCharts";
 import DatasetOverview from "@/components/DatasetOverview";
+import DataTable from "@/components/DataTable";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -86,7 +87,10 @@ export default function Analytics() {
           </TabsContent>
 
           <TabsContent value="dataset-overview">
-            <DatasetOverview />
+            <div className="space-y-8">
+              <DatasetOverview />
+              <DataTable />
+            </div>
           </TabsContent>
 
           <TabsContent value="manual-entry">

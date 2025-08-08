@@ -3,6 +3,43 @@ import { Link, useLocation } from "wouter";
 import { Clock, BarChart3, Calendar, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+// Utility functions for CSV download
+const convertToCSV = (data: any[]) => {
+  if (!data || data.length === 0) return '';
+  
+  const headers = ['Name', 'Industry', 'Client', 'Budget', 'Actual Cost', 'Team Size', 'Status', 'Progress', 'Start Date', 'End Date', 'Location'];
+  const csvContent = [
+    headers.join(','),
+    ...data.map(row => [
+      `"${row.name}"`,
+      `"${row.industry}"`,
+      `"${row.client}"`,
+      row.budget,
+      row.actualCost,
+      row.teamSize,
+      `"${row.status}"`,
+      `${row.progress}%`,
+      `"${row.startDate}"`,
+      `"${row.endDate}"`,
+      `"${row.location}"`
+    ].join(','))
+  ].join('\n');
+  
+  return csvContent;
+};
+
+const downloadCSV = (csv: string, filename: string) => {
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+  link.setAttribute('href', url);
+  link.setAttribute('download', filename);
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
 export default function Header() {
   const [location] = useLocation();
   const [currentTimer, setCurrentTimer] = useState({
@@ -47,7 +84,20 @@ export default function Header() {
 
           {/* Action Buttons */}
           <div className="flex items-center space-x-4">
-            <Button variant="outline" size="sm">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => {
+                // Download project data as CSV
+                fetch('/api/projects/real-data')
+                  .then(res => res.json())
+                  .then(data => {
+                    const csv = convertToCSV(data.projects);
+                    downloadCSV(csv, 'project-data.csv');
+                  })
+                  .catch(err => console.error('Download failed:', err));
+              }}
+            >
               Download Data
             </Button>
           </div>
