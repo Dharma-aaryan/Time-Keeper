@@ -14,59 +14,69 @@ import { z } from "zod";
 export async function registerRoutes(app: Express): Promise<Server> {
   // Real project data routes
   app.get('/api/projects/real-data', async (req, res) => {
-    const { realProjectsData, industryStats } = await import('./data/realProjects');
-    res.json({
-      projects: realProjectsData,
-      stats: industryStats,
-      summary: {
-        total: realProjectsData.length,
-        active: realProjectsData.filter(p => p.status === 'in-progress').length,
-        completed: realProjectsData.filter(p => p.status === 'completed').length,
-        testing: realProjectsData.filter(p => p.status === 'testing').length,
-        planning: realProjectsData.filter(p => p.status === 'planning').length
-      }
-    });
+    try {
+      const { realProjectsData, industryStats } = await import('./data/realProjects');
+      res.json({
+        projects: realProjectsData,
+        stats: industryStats,
+        summary: {
+          total: realProjectsData.length,
+          active: realProjectsData.filter(p => p.status === 'in-progress').length,
+          completed: realProjectsData.filter(p => p.status === 'completed').length,
+          testing: realProjectsData.filter(p => p.status === 'testing').length,
+          planning: realProjectsData.filter(p => p.status === 'planning').length
+        }
+      });
+    } catch (error) {
+      console.error('Error loading project data:', error);
+      res.status(500).json({ error: 'Failed to load project data' });
+    }
   });
 
   app.get('/api/projects/analytics', async (req, res) => {
-    const { realProjectsData } = await import('./data/realProjects');
-    
-    // Calculate analytics from real data
-    const industryBreakdown = realProjectsData.reduce((acc, project) => {
-      acc[project.industry] = (acc[project.industry] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    try {
+      const { realProjectsData } = await import('./data/realProjects');
+      
+      // Calculate analytics from real data
+      const industryBreakdown = realProjectsData.reduce((acc, project) => {
+        acc[project.industry] = (acc[project.industry] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
 
-    const budgetAnalysis = realProjectsData.map(p => ({
-      name: p.name.substring(0, 15) + '...',
-      estimated: p.budget,
-      actual: p.actualCost,
-      efficiency: Math.round((p.actualCost / p.budget) * 100)
-    }));
+      const budgetAnalysis = realProjectsData.map(p => ({
+        name: p.name.substring(0, 15) + '...',
+        estimated: p.budget,
+        actual: p.actualCost,
+        efficiency: Math.round((p.actualCost / p.budget) * 100)
+      }));
 
-    const timelineData = realProjectsData.map(p => {
-      const start = new Date(p.startDate);
-      const end = new Date(p.endDate);
-      const duration = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-      return {
-        name: p.name.substring(0, 20),
-        duration,
-        progress: p.progress,
-        industry: p.industry
-      };
-    });
+      const timelineData = realProjectsData.map(p => {
+        const start = new Date(p.startDate);
+        const end = new Date(p.endDate);
+        const duration = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+        return {
+          name: p.name.substring(0, 20),
+          duration,
+          progress: p.progress,
+          industry: p.industry
+        };
+      });
 
-    res.json({
-      industryBreakdown,
-      budgetAnalysis,
-      timelineData,
-      summary: {
-        totalBudget: realProjectsData.reduce((sum, p) => sum + p.budget, 0),
-        totalActualCost: realProjectsData.reduce((sum, p) => sum + p.actualCost, 0),
-        avgTeamSize: Math.round(realProjectsData.reduce((sum, p) => sum + p.teamSize, 0) / realProjectsData.length),
-        avgProgress: Math.round(realProjectsData.reduce((sum, p) => sum + p.progress, 0) / realProjectsData.length)
-      }
-    });
+      res.json({
+        industryBreakdown,
+        budgetAnalysis,
+        timelineData,
+        summary: {
+          totalBudget: realProjectsData.reduce((sum, p) => sum + p.budget, 0),
+          totalActualCost: realProjectsData.reduce((sum, p) => sum + p.actualCost, 0),
+          avgTeamSize: Math.round(realProjectsData.reduce((sum, p) => sum + p.teamSize, 0) / realProjectsData.length),
+          avgProgress: Math.round(realProjectsData.reduce((sum, p) => sum + p.progress, 0) / realProjectsData.length)
+        }
+      });
+    } catch (error) {
+      console.error('Error calculating analytics:', error);
+      res.status(500).json({ error: 'Failed to calculate analytics' });
+    }
   });
 
   // Manual project entry routes

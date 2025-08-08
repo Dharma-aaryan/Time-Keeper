@@ -47,14 +47,8 @@ export default function Header() {
 
           {/* Action Buttons */}
           <div className="flex items-center space-x-4">
-            {/* Status Indicator */}
-            <div className="hidden sm:flex items-center space-x-3 bg-green-50 px-4 py-2 rounded-lg border border-green-200">
-              <div className="w-2 h-2 bg-green-500 rounded-full timer-pulse"></div>
-              <span className="text-green-700 font-medium">Live Dashboard</span>
-            </div>
-
             <Button variant="outline" size="sm">
-              Export Data
+              Download Data
             </Button>
           </div>
         </div>

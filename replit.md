@@ -6,6 +6,20 @@ ProjectDash is a comprehensive project management dashboard designed for teams a
 
 Preferred communication style: Simple, everyday language.
 
+# Recent Changes (December 2024)
+
+## Dashboard Updates
+- Removed "Live Dashboard" button, changed "Export Data" to "Download Data"
+- Removed Recent Activity section from dashboard
+- Updated Team Performance to use random names (Jane Doe, John Smith, etc.) and removed profile photos
+- Added Dataset Overview tab to analytics page
+
+## Real Data Integration
+- Connected real project data from 8+ industries with $118M+ in combined budgets
+- Added manual project entry form with comprehensive field validation
+- Created dataset files documentation for transparency
+- Integrated authentic data sources from government databases, clinical trials, and industry datasets
+
 # System Architecture
 
 ## Frontend Architecture

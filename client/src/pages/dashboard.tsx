@@ -2,7 +2,6 @@ import Header from "@/components/Header";
 import ProjectOverviewCards from "@/components/ProjectOverviewCards";
 import ActiveProjectsTable from "@/components/ActiveProjectsTable";
 import ProjectStatusChart from "@/components/ProjectStatusChart";
-import RecentActivity from "@/components/RecentActivity";
 import TeamPerformance from "@/components/TeamPerformance";
 import { Button } from "@/components/ui/button";
 import { Plus, Download, RefreshCw } from "lucide-react";
@@ -76,8 +75,7 @@ export default function Dashboard() {
         </div>
 
         {/* Bottom Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <RecentActivity />
+        <div className="grid grid-cols-1 gap-8">
           <TeamPerformance />
         </div>
       </main>

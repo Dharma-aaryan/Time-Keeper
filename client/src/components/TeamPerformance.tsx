@@ -6,9 +6,8 @@ import { Badge } from "@/components/ui/badge";
 const teamMembers = [
   {
     id: 1,
-    name: "Alex Johnson",
+    name: "Jane Doe",
     role: "Frontend Developer",
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100",
     tasksCompleted: 18,
     totalTasks: 22,
     efficiency: 85,
@@ -16,9 +15,8 @@ const teamMembers = [
   },
   {
     id: 2,
-    name: "Sarah Chen",
+    name: "John Smith",
     role: "UI/UX Designer",
-    avatar: "https://images.unsplash.com/photo-1494790108755-2616b612db15?w=100",
     tasksCompleted: 14,
     totalTasks: 16,
     efficiency: 92,
@@ -26,9 +24,8 @@ const teamMembers = [
   },
   {
     id: 3,
-    name: "Mike Wilson",
+    name: "Alice Johnson",
     role: "Backend Developer",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100",
     tasksCompleted: 12,
     totalTasks: 15,
     efficiency: 78,
@@ -36,9 +33,8 @@ const teamMembers = [
   },
   {
     id: 4,
-    name: "Emily Davis",
+    name: "Bob Wilson",
     role: "QA Engineer",
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100",
     tasksCompleted: 9,
     totalTasks: 12,
     efficiency: 88,
@@ -46,9 +42,8 @@ const teamMembers = [
   },
   {
     id: 5,
-    name: "David Brown",
+    name: "Carol Brown",
     role: "Project Manager",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100",
     tasksCompleted: 7,
     totalTasks: 8,
     efficiency: 95,
@@ -82,10 +77,11 @@ export default function TeamPerformance() {
             
             return (
               <div key={member.id} className="flex items-center space-x-4">
-                <Avatar className="w-10 h-10">
-                  <AvatarImage src={member.avatar} alt={member.name} />
-                  <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                </Avatar>
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <span className="text-sm font-medium text-primary">
+                    {member.name.split(' ').map(n => n[0]).join('')}
+                  </span>
+                </div>
                 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">

@@ -5,6 +5,7 @@ import ResourceUtilizationChart from "@/components/ResourceUtilizationChart";
 import ProjectTimelineChart from "@/components/ProjectTimelineChart";
 import ManualProjectForm from "@/components/ManualProjectForm";
 import RealDataCharts from "@/components/RealDataCharts";
+import DatasetOverview from "@/components/DatasetOverview";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -55,10 +56,14 @@ export default function Analytics() {
 
         {/* Data Source Tabs */}
         <Tabs defaultValue="real-data" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="real-data" className="flex items-center space-x-2">
               <Database className="w-4 h-4" />
               <span>Real Industry Data</span>
+            </TabsTrigger>
+            <TabsTrigger value="dataset-overview" className="flex items-center space-x-2">
+              <Filter className="w-4 h-4" />
+              <span>Dataset Overview</span>
             </TabsTrigger>
             <TabsTrigger value="manual-entry" className="flex items-center space-x-2">
               <Plus className="w-4 h-4" />
@@ -78,6 +83,10 @@ export default function Analytics() {
             ) : (
               <RealDataCharts data={realData} />
             )}
+          </TabsContent>
+
+          <TabsContent value="dataset-overview">
+            <DatasetOverview />
           </TabsContent>
 
           <TabsContent value="manual-entry">

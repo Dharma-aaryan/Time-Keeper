@@ -18,10 +18,21 @@ export default function RealDataCharts({ data }: RealDataChartsProps) {
   const { industryBreakdown, budgetAnalysis, timelineData, summary } = data;
 
   // Transform industry breakdown for pie chart
+  // Simple hash function for consistent colors
+  const hashCode = (str: string) => {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    return Math.abs(hash);
+  };
+
   const industryChartData = Object.entries(industryBreakdown).map(([industry, count]) => ({
     name: industry,
     value: count as number,
-    color: `hsl(${Math.hash(industry) % 360}, 65%, 50%)`
+    color: `hsl(${hashCode(industry) % 360}, 65%, 50%)`
   }));
 
   // Format budget data for display
@@ -211,9 +222,9 @@ export default function RealDataCharts({ data }: RealDataChartsProps) {
           <CardContent>
             <div className="space-y-4">
               {Object.entries(industryBreakdown).map(([industry, count]) => {
-                const industryProjects = timelineData.filter(p => p.industry === industry);
+                const industryProjects = timelineData.filter((p: any) => p.industry === industry);
                 const avgProgress = Math.round(
-                  industryProjects.reduce((sum, p) => sum + p.progress, 0) / industryProjects.length || 0
+                  industryProjects.reduce((sum: number, p: any) => sum + p.progress, 0) / industryProjects.length || 0
                 );
                 
                 return (
@@ -237,20 +248,3 @@ export default function RealDataCharts({ data }: RealDataChartsProps) {
   );
 }
 
-// Simple hash function for consistent colors
-declare global {
-  interface String {
-    hash(): number;
-  }
-}
-
-String.prototype.hash = function() {
-  let hash = 0;
-  if (this.length === 0) return hash;
-  for (let i = 0; i < this.length; i++) {
-    const char = this.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash; // Convert to 32-bit integer
-  }
-  return Math.abs(hash);
-};

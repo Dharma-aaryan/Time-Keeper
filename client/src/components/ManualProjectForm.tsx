@@ -56,8 +56,11 @@ export default function ManualProjectForm() {
 
   const createProjectMutation = useMutation({
     mutationFn: async (data: ProjectFormData) => {
-      return apiRequest('/api/projects/manual', {
+      const response = await fetch('/api/projects/manual', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           ...data,
           budget: parseFloat(data.budget),
@@ -66,6 +69,12 @@ export default function ManualProjectForm() {
           progress: 0,
         }),
       });
+      
+      if (!response.ok) {
+        throw new Error('Failed to create project');
+      }
+      
+      return response.json();
     },
     onSuccess: () => {
       toast({
