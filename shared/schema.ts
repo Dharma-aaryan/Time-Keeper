@@ -34,7 +34,9 @@ export const users = pgTable("users", {
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
   profileImageUrl: varchar("profile_image_url"),
-  role: varchar("role").default("employee"), // employee, manager, admin
+  role: varchar("role").default("developer"), // developer, manager, designer, qa
+  department: varchar("department"),
+  hourlyRate: decimal("hourly_rate", { precision: 10, scale: 2 }),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

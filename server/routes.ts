@@ -12,19 +12,23 @@ import {
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Auth middleware
-  await setupAuth(app);
+  // Mock data routes for dashboard (no auth required)
+  app.get('/api/projects/overview', async (req, res) => {
+    res.json({
+      total: 24,
+      active: 12,
+      completed: 8,
+      onHold: 4
+    });
+  });
 
-  // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
-    }
+  app.get('/api/team/stats', async (req, res) => {
+    res.json({
+      totalMembers: 28,
+      activeMembers: 24,
+      utilization: 87,
+      efficiency: 92
+    });
   });
 
   // Client routes

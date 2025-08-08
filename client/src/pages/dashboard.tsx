@@ -1,51 +1,27 @@
-import { useEffect } from "react";
-import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
-import QuickTimer from "@/components/QuickTimer";
-import RecentProjects from "@/components/RecentProjects";
-import StatsCards from "@/components/StatsCards";
-import TimeEntriesTable from "@/components/TimeEntriesTable";
-import TimeOffRequests from "@/components/TimeOffRequests";
-import Notifications from "@/components/Notifications";
+import ProjectOverviewCards from "@/components/ProjectOverviewCards";
+import ActiveProjectsTable from "@/components/ActiveProjectsTable";
+import ProjectStatusChart from "@/components/ProjectStatusChart";
+import RecentActivity from "@/components/RecentActivity";
+import TeamPerformance from "@/components/TeamPerformance";
 import { Button } from "@/components/ui/button";
-import { Plus, Download } from "lucide-react";
+import { Plus, Download, RefreshCw } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Dashboard() {
   const { toast } = useToast();
-  const { isAuthenticated, isLoading, user } = useAuth();
 
-  // Redirect to home if not authenticated
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      toast({
-        title: "Unauthorized",
-        description: "You are logged out. Logging in again...",
-        variant: "destructive",
-      });
-      setTimeout(() => {
-        window.location.href = "/api/login";
-      }, 500);
-      return;
-    }
-  }, [isAuthenticated, isLoading, toast]);
+  const handleRefreshData = () => {
+    toast({
+      title: "Data Refreshed",
+      description: "Project data has been updated with the latest information.",
+    });
+  };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return null;
-  }
-
-  const handleExportTimesheet = () => {
+  const handleExportData = () => {
     toast({
       title: "Export Started",
-      description: "Your timesheet export is being prepared...",
+      description: "Your project data export is being prepared...",
     });
   };
 
@@ -54,52 +30,55 @@ export default function Dashboard() {
       <Header />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          
-          {/* Sidebar */}
-          <aside className="lg:col-span-1">
-            <QuickTimer />
-            <RecentProjects />
-          </aside>
-
-          {/* Main Content */}
-          <div className="lg:col-span-3">
-            {/* Dashboard Header */}
-            <div className="flex justify-between items-center mb-8">
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-                <p className="text-muted-foreground mt-1">
-                  Welcome back, {user?.firstName || 'there'}! Here's your time tracking overview.
-                </p>
-              </div>
-              <div className="flex space-x-3">
-                <Button 
-                  variant="outline" 
-                  onClick={handleExportTimesheet}
-                  className="flex items-center space-x-2"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>Export</span>
-                </Button>
-                <Button className="flex items-center space-x-2">
-                  <Plus className="w-4 h-4" />
-                  <span>Add Entry</span>
-                </Button>
-              </div>
-            </div>
-
-            {/* Stats Cards */}
-            <StatsCards />
-
-            {/* Recent Time Entries */}
-            <TimeEntriesTable />
-
-            {/* Time Off & Notifications */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <TimeOffRequests />
-              <Notifications />
-            </div>
+        {/* Dashboard Header */}
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Project Dashboard</h1>
+            <p className="text-muted-foreground mt-1">
+              Real-time insights into your project portfolio and team performance
+            </p>
           </div>
+          <div className="flex space-x-3">
+            <Button 
+              variant="outline" 
+              onClick={handleRefreshData}
+              className="flex items-center space-x-2"
+            >
+              <RefreshCw className="w-4 h-4" />
+              <span>Refresh</span>
+            </Button>
+            <Button 
+              variant="outline" 
+              onClick={handleExportData}
+              className="flex items-center space-x-2"
+            >
+              <Download className="w-4 h-4" />
+              <span>Export</span>
+            </Button>
+            <Button className="flex items-center space-x-2">
+              <Plus className="w-4 h-4" />
+              <span>New Project</span>
+            </Button>
+          </div>
+        </div>
+
+        {/* Overview Cards */}
+        <ProjectOverviewCards />
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          <div className="lg:col-span-2">
+            <ActiveProjectsTable />
+          </div>
+          <div>
+            <ProjectStatusChart />
+          </div>
+        </div>
+
+        {/* Bottom Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <RecentActivity />
+          <TeamPerformance />
         </div>
       </main>
     </div>

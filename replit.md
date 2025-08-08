@@ -1,6 +1,6 @@
 # Overview
 
-TimeSuite is a comprehensive time tracking and project management application designed for teams and organizations. The application provides professional time tracking capabilities with features for project management, timesheet approval workflows, and comprehensive reporting. Built as a full-stack web application, it combines a React frontend with an Express.js backend, utilizing PostgreSQL for data persistence and Replit's authentication system for user management.
+ProjectDash is a comprehensive project management dashboard designed for teams and organizations. The application provides real-time insights into project performance, team productivity, and resource utilization with advanced analytics and visualization features. Built as a full-stack web application, it combines a React frontend with an Express.js backend, featuring interactive charts and comprehensive project analysis tools.
 
 # User Preferences
 
@@ -20,10 +20,10 @@ The frontend is built using **React with TypeScript** and follows a component-ba
 - **Build Tool**: Vite for fast development and optimized production builds
 
 The frontend follows a page-based structure with reusable components, implementing features like:
-- Dashboard with time tracking widgets
-- Project management interface
-- Timesheet submission and approval workflows
-- Team management and reporting
+- Executive dashboard with project overview widgets
+- Advanced analytics with interactive charts
+- Project status tracking and timeline visualization
+- Team performance monitoring and resource utilization
 
 ## Backend Architecture
 
@@ -51,26 +51,26 @@ The server implements a layered architecture with:
 - **Session Storage**: Dedicated sessions table for authentication state
 
 Key entities include:
-- Users with role-based access (employee, manager, admin)
+- Users with role-based access (developer, designer, manager, qa)
 - Clients and projects for work organization
-- Time entries with approval workflows
-- Time-off requests and notifications system
+- Project analytics and performance metrics
+- Team collaboration and activity tracking
 
 ## Authentication and Authorization
 
-**Replit Authentication Integration**:
+**Simplified Access Model**:
 
-- **Provider**: Replit's OIDC for seamless platform integration
-- **Session Management**: Server-side sessions with PostgreSQL storage
-- **User Management**: Automatic user creation and profile synchronization
-- **Security**: Secure cookie configuration with HTTPS enforcement
-- **Role-Based Access**: User roles determine feature access and permissions
+- **Open Access**: Dashboard operates without authentication for demo purposes
+- **Mock Data**: Uses sample data for visualization and analytics
+- **Role Simulation**: Simulates different user roles for demonstration
+- **Security**: Prepared for future authentication integration
+- **Data Models**: Maintains user role structure for future expansion
 
-The authentication system handles:
-- Automatic user provisioning from Replit accounts
-- Session persistence across browser sessions
-- Protected API endpoints with middleware
-- User profile management and updates
+The access system features:
+- Immediate dashboard access without login barriers
+- Sample project and team data for demonstration
+- Role-based UI components ready for authentication
+- Prepared infrastructure for future security implementation
 
 # External Dependencies
 
