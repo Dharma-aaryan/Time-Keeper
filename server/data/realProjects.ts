@@ -476,6 +476,216 @@ export const realProjectsData: ProjectData[] = [
   }
 ];
 
+// Generate additional projects to reach 100+ total
+const additionalProjects = [
+  // Additional Construction Projects (25 more)
+  ...Array.from({length: 25}, (_, i) => ({
+    id: `CONST_${String(i + 4).padStart(3, '0')}`,
+    name: [
+      'Urban Housing Development', 'Metro Transit Expansion', 'Bridge Reconstruction Project',
+      'Stadium Construction', 'Hospital Facility Upgrade', 'Shopping Center Development',
+      'Office Tower Construction', 'School District Modernization', 'Highway Expansion',
+      'Water Treatment Plant', 'Parking Garage Construction', 'Community Center Build',
+      'Fire Station Renovation', 'Library Construction', 'Municipal Building Upgrade',
+      'Sports Complex Development', 'Retail Plaza Construction', 'Warehouse Facility',
+      'Manufacturing Plant Setup', 'Airport Runway Extension', 'Port Terminal Expansion',
+      'Convention Center Build', 'Hotel Construction Project', 'Residential Complex',
+      'Industrial Park Development'
+    ][i],
+    industry: 'Construction',
+    domain: ['Infrastructure', 'Commercial', 'Residential', 'Public Works'][i % 4],
+    client: [
+      'City Planning Department', 'Private Developer LLC', 'Municipal Authority',
+      'State Transportation Dept', 'Regional Hospital System', 'Education District',
+      'Commercial Real Estate', 'Infrastructure Corp', 'Public Works Dept'
+    ][i % 9],
+    status: ['planning', 'in-progress', 'testing', 'completed', 'on-hold'][i % 5],
+    startDate: `2024-${String(Math.floor(i/2) + 1).padStart(2, '0')}-01`,
+    endDate: `2025-${String(Math.floor(i/2) + 6).padStart(2, '0')}-30`,
+    budget: Math.floor(Math.random() * 45000000) + 5000000,
+    actualCost: Math.floor(Math.random() * 35000000) + 3000000,
+    teamSize: Math.floor(Math.random() * 80) + 20,
+    progress: Math.floor(Math.random() * 100),
+    priority: ['low', 'medium', 'high'][i % 3],
+    riskLevel: ['low', 'medium', 'high'][i % 3],
+    location: [
+      'Phoenix, AZ', 'Philadelphia, PA', 'San Antonio, TX', 'San Diego, CA',
+      'Dallas, TX', 'San Jose, CA', 'Austin, TX', 'Jacksonville, FL',
+      'Fort Worth, TX', 'Columbus, OH', 'Charlotte, NC', 'Indianapolis, IN',
+      'San Francisco, CA', 'Seattle, WA', 'Denver, CO', 'Washington, DC',
+      'Boston, MA', 'Detroit, MI', 'Nashville, TN', 'Portland, OR',
+      'Memphis, TN', 'Oklahoma City, OK', 'Las Vegas, NV', 'Louisville, KY',
+      'Baltimore, MD'
+    ][i],
+    description: `Large-scale construction project involving modern techniques and sustainable practices`,
+    technologies: ['Construction Management', 'BIM Technology', 'Safety Systems', 'Quality Control'],
+    phases: []
+  })),
+
+  // Additional Healthcare Projects (20 more)
+  ...Array.from({length: 20}, (_, i) => ({
+    id: `HEALTH_${String(i + 4).padStart(3, '0')}`,
+    name: [
+      'Electronic Health Records System', 'Medical Device Integration Platform',
+      'Patient Portal Development', 'Clinical Decision Support System',
+      'Medical Imaging Analytics', 'Pharmacy Management System',
+      'Laboratory Information System', 'Telehealth Platform Expansion',
+      'Healthcare Data Warehouse', 'Medical Staff Scheduling System',
+      'Patient Monitoring Network', 'Healthcare Mobile App',
+      'Clinical Trial Management', 'Medical Equipment Tracking',
+      'Health Information Exchange', 'Medical Billing Automation',
+      'Surgical Planning Software', 'Emergency Response System',
+      'Healthcare Analytics Dashboard', 'Medical Research Database'
+    ][i],
+    industry: 'Healthcare',
+    domain: ['Medical Technology', 'Digital Health', 'Clinical Systems', 'Healthcare IT'][i % 4],
+    client: [
+      'Mayo Clinic', 'Johns Hopkins', 'Cleveland Clinic', 'Mass General Brigham',
+      'Intermountain Healthcare', 'Geisinger Health', 'Partners Healthcare',
+      'UPMC', 'Scripps Health', 'Northwell Health'
+    ][i % 10],
+    status: ['planning', 'in-progress', 'testing', 'completed', 'on-hold'][i % 5],
+    startDate: `2024-${String(Math.floor(i/2) + 1).padStart(2, '0')}-15`,
+    endDate: `2025-${String(Math.floor(i/2) + 4).padStart(2, '0')}-30`,
+    budget: Math.floor(Math.random() * 15000000) + 2000000,
+    actualCost: Math.floor(Math.random() * 12000000) + 1500000,
+    teamSize: Math.floor(Math.random() * 45) + 15,
+    progress: Math.floor(Math.random() * 100),
+    priority: ['low', 'medium', 'high'][i % 3],
+    riskLevel: ['low', 'medium', 'high'][i % 3],
+    location: [
+      'Rochester, MN', 'Baltimore, MD', 'Cleveland, OH', 'Boston, MA',
+      'Salt Lake City, UT', 'Danville, PA', 'Boston, MA', 'Pittsburgh, PA',
+      'La Jolla, CA', 'New Hyde Park, NY', 'Houston, TX', 'Nashville, TN',
+      'Rochester, NY', 'Durham, NC', 'Stanford, CA', 'New Haven, CT',
+      'Ann Arbor, MI', 'Atlanta, GA', 'Milwaukee, WI', 'Cincinnati, OH'
+    ][i],
+    description: `Advanced healthcare technology solution improving patient care and operational efficiency`,
+    technologies: ['Healthcare IT', 'HIPAA Compliance', 'Medical Devices', 'Cloud Computing'],
+    phases: []
+  })),
+
+  // Additional Technology Projects (30 more)
+  ...Array.from({length: 30}, (_, i) => ({
+    id: `TECH_${String(i + 4).padStart(3, '0')}`,
+    name: [
+      'E-commerce Platform Redesign', 'Mobile App Development', 'Data Analytics Platform',
+      'Cloud Infrastructure Migration', 'Cybersecurity Enhancement', 'API Gateway Implementation',
+      'Machine Learning Pipeline', 'DevOps Automation', 'Database Optimization',
+      'Content Management System', 'Search Engine Enhancement', 'Social Media Integration',
+      'Payment Processing System', 'User Authentication Platform', 'Monitoring Dashboard',
+      'Backup and Recovery System', 'Load Balancing Solution', 'Microservices Architecture',
+      'Real-time Messaging System', 'Video Streaming Platform', 'IoT Data Collection',
+      'Blockchain Implementation', 'AR/VR Application', 'Voice Recognition System',
+      'Recommendation Engine', 'Fraud Detection System', 'Inventory Management',
+      'Customer Support Platform', 'Business Intelligence Tool', 'Workflow Automation'
+    ][i],
+    industry: 'Technology',
+    domain: ['Software Development', 'Cloud Computing', 'Data Science', 'Cybersecurity'][i % 4],
+    client: [
+      'Microsoft Corporation', 'Google LLC', 'Apple Inc', 'Meta Platforms',
+      'Salesforce Inc', 'Oracle Corporation', 'IBM Corporation', 'Adobe Systems',
+      'Shopify Inc', 'Zoom Video', 'Slack Technologies', 'Dropbox Inc',
+      'Square Inc', 'Stripe Inc', 'Airbnb Inc', 'Uber Technologies'
+    ][i % 16],
+    status: ['planning', 'in-progress', 'testing', 'completed', 'on-hold'][i % 5],
+    startDate: `2024-${String(Math.floor(i/3) + 1).padStart(2, '0')}-01`,
+    endDate: `2024-${String(Math.floor(i/3) + 8).padStart(2, '0')}-30`,
+    budget: Math.floor(Math.random() * 25000000) + 1000000,
+    actualCost: Math.floor(Math.random() * 20000000) + 800000,
+    teamSize: Math.floor(Math.random() * 60) + 10,
+    progress: Math.floor(Math.random() * 100),
+    priority: ['low', 'medium', 'high'][i % 3],
+    riskLevel: ['low', 'medium', 'high'][i % 3],
+    location: [
+      'Redmond, WA', 'Mountain View, CA', 'Cupertino, CA', 'Menlo Park, CA',
+      'San Francisco, CA', 'Austin, TX', 'Armonk, NY', 'San Jose, CA',
+      'Ottawa, ON', 'San Jose, CA', 'San Francisco, CA', 'San Francisco, CA',
+      'San Francisco, CA', 'San Francisco, CA', 'San Francisco, CA', 'San Francisco, CA'
+    ][i % 16],
+    description: `Cutting-edge technology solution leveraging modern frameworks and best practices`,
+    technologies: ['React', 'Node.js', 'Python', 'AWS', 'Docker', 'Kubernetes'],
+    phases: []
+  })),
+
+  // Additional Manufacturing Projects (15 more)
+  ...Array.from({length: 15}, (_, i) => ({
+    id: `MFG_${String(i + 4).padStart(3, '0')}`,
+    name: [
+      'Quality Control Automation', 'Production Line Optimization',
+      'Inventory Management System', 'Predictive Maintenance Platform',
+      'Supply Chain Integration', 'Factory Floor Digitization',
+      'Product Lifecycle Management', 'Warehouse Automation',
+      'Energy Efficiency Program', 'Safety Compliance System',
+      'Equipment Monitoring Network', 'Production Planning Software',
+      'Material Handling Automation', 'Environmental Compliance',
+      'Worker Training Platform'
+    ][i],
+    industry: 'Manufacturing',
+    domain: ['Industrial Automation', 'Process Optimization', 'Quality Assurance', 'Supply Chain'][i % 4],
+    client: [
+      '3M Company', 'Caterpillar Inc', 'Deere & Company', 'Honeywell International',
+      'Lockheed Martin', 'Raytheon Technologies', 'Northrop Grumman',
+      'Boeing Company', 'General Dynamics', 'Textron Inc'
+    ][i % 10],
+    status: ['planning', 'in-progress', 'testing', 'completed', 'on-hold'][i % 5],
+    startDate: `2024-${String(Math.floor(i/2) + 1).padStart(2, '0')}-01`,
+    endDate: `2025-${String(Math.floor(i/2) + 4).padStart(2, '0')}-30`,
+    budget: Math.floor(Math.random() * 18000000) + 3000000,
+    actualCost: Math.floor(Math.random() * 15000000) + 2500000,
+    teamSize: Math.floor(Math.random() * 55) + 25,
+    progress: Math.floor(Math.random() * 100),
+    priority: ['low', 'medium', 'high'][i % 3],
+    riskLevel: ['low', 'medium', 'high'][i % 3],
+    location: [
+      'Maplewood, MN', 'Peoria, IL', 'Moline, IL', 'Charlotte, NC',
+      'Bethesda, MD', 'Waltham, MA', 'Falls Church, VA',
+      'Chicago, IL', 'Reston, VA', 'Providence, RI'
+    ][i % 10],
+    description: `Advanced manufacturing solution improving efficiency and product quality`,
+    technologies: ['Industrial IoT', 'Machine Learning', 'Robotics', 'Analytics'],
+    phases: []
+  })),
+
+  // Additional Financial Services Projects (10 more)
+  ...Array.from({length: 10}, (_, i) => ({
+    id: `FIN_${String(i + 2).padStart(3, '0')}`,
+    name: [
+      'Digital Banking Platform', 'Risk Management System', 'Fraud Detection Engine',
+      'Mobile Payment Solution', 'Investment Portfolio Manager', 'Credit Scoring Model',
+      'Regulatory Compliance Platform', 'Customer Analytics Dashboard',
+      'Trading Automation System', 'Insurance Claims Processing'
+    ][i],
+    industry: 'Financial Services',
+    domain: ['Digital Banking', 'Risk Management', 'Fintech', 'Insurance'][i % 4],
+    client: [
+      'Goldman Sachs', 'Morgan Stanley', 'Wells Fargo', 'Bank of America',
+      'Citigroup', 'American Express', 'Capital One', 'Charles Schwab',
+      'Fidelity Investments', 'BlackRock Inc'
+    ][i],
+    status: ['planning', 'in-progress', 'testing', 'completed', 'on-hold'][i % 5],
+    startDate: `2024-${String(Math.floor(i/2) + 1).padStart(2, '0')}-01`,
+    endDate: `2024-${String(Math.floor(i/2) + 9).padStart(2, '0')}-30`,
+    budget: Math.floor(Math.random() * 12000000) + 4000000,
+    actualCost: Math.floor(Math.random() * 10000000) + 3500000,
+    teamSize: Math.floor(Math.random() * 40) + 20,
+    progress: Math.floor(Math.random() * 100),
+    priority: ['low', 'medium', 'high'][i % 3],
+    riskLevel: ['low', 'medium', 'high'][i % 3],
+    location: [
+      'New York, NY', 'New York, NY', 'San Francisco, CA', 'Charlotte, NC',
+      'New York, NY', 'New York, NY', 'McLean, VA', 'Westlake, TX',
+      'Boston, MA', 'New York, NY'
+    ][i],
+    description: `Financial technology solution enhancing security and customer experience`,
+    technologies: ['Blockchain', 'Machine Learning', 'Cybersecurity', 'Mobile Development'],
+    phases: []
+  }))
+];
+
+// Combine original and additional projects
+export const realProjects = [...realProjectsData, ...additionalProjects];
+
 export const industryStats = {
   'Construction': { totalProjects: 3847, avgBudget: 28966667, avgDuration: 456 },
   'Healthcare': { totalProjects: 2156, avgBudget: 8016667, avgDuration: 423 },

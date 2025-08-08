@@ -2,11 +2,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
 const data = [
-  { name: "In Progress", value: 8, color: "hsl(var(--primary))" },
-  { name: "Planning", value: 3, color: "hsl(var(--chart-3))" },
-  { name: "Testing", value: 2, color: "hsl(var(--chart-4))" },
-  { name: "Completed", value: 5, color: "hsl(var(--chart-2))" },
-  { name: "On Hold", value: 1, color: "hsl(var(--chart-5))" },
+  { name: "In Progress", value: 8, color: "#3b82f6" },
+  { name: "Planning", value: 3, color: "#f59e0b" },
+  { name: "Testing", value: 2, color: "#8b5cf6" },
+  { name: "Completed", value: 5, color: "#10b981" },
+  { name: "On Hold", value: 1, color: "#ef4444" },
 ];
 
 const RADIAN = Math.PI / 180;

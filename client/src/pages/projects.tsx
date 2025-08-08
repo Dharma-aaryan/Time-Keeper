@@ -73,17 +73,11 @@ export default function Projects() {
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="flex justify-between items-start mb-8">
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Projects</h1>
-            <p className="text-muted-foreground mt-1">
-              Manage and track all your projects across industries
-            </p>
-          </div>
-          <Button onClick={() => window.location.href = '/analytics#manual-entry'}>
-            <Plus className="w-4 h-4 mr-2" />
-            New Project
-          </Button>
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-foreground">Projects</h1>
+          <p className="text-muted-foreground mt-1">
+            Manage and track all your projects across industries
+          </p>
         </div>
 
         {/* Project Statistics */}
@@ -159,96 +153,58 @@ export default function Projects() {
           ))}
         </div>
 
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          {filteredProjects.map((project: any) => (
-            <Card key={project.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader className="pb-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <CardTitle className="text-lg mb-2">{project.name}</CardTitle>
-                    <div className="flex items-center space-x-2 mb-2">
-                      <Badge variant="outline" className="text-xs">
-                        {project.industry}
-                      </Badge>
-                      <Badge className={getStatusColor(project.status) + " text-xs"}>
-                        {project.status}
-                      </Badge>
-                    </div>
-                  </div>
-                  {getRiskIcon(project.riskLevel)}
-                </div>
-                <p className="text-sm text-muted-foreground line-clamp-2">
-                  {project.description}
-                </p>
-              </CardHeader>
-              
-              <CardContent className="space-y-4">
-                {/* Progress */}
-                <div>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="text-muted-foreground">Progress</span>
-                    <span className="font-medium">{project.progress}%</span>
-                  </div>
-                  <Progress value={project.progress} className="h-2" />
-                </div>
-
-                {/* Project Details */}
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <p className="text-muted-foreground">Budget</p>
-                    <p className="font-medium">{formatCurrency(project.budget)}</p>
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground">Team Size</p>
-                    <p className="font-medium">{project.teamSize} members</p>
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground">Start Date</p>
-                    <p className="font-medium">{formatDate(project.startDate)}</p>
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground">End Date</p>
-                    <p className="font-medium">{formatDate(project.endDate)}</p>
-                  </div>
-                </div>
-
-                {/* Client & Location */}
-                <div className="pt-2 border-t">
-                  <div className="flex justify-between text-sm">
-                    <div>
-                      <p className="text-muted-foreground">Client</p>
-                      <p className="font-medium">{project.client}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-muted-foreground">Location</p>
-                      <p className="font-medium text-xs">{project.location}</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Technologies */}
-                {project.technologies && project.technologies.length > 0 && (
-                  <div className="pt-2">
-                    <p className="text-muted-foreground text-sm mb-2">Technologies</p>
-                    <div className="flex flex-wrap gap-1">
-                      {project.technologies.slice(0, 3).map((tech: string, index: number) => (
-                        <Badge key={index} variant="secondary" className="text-xs">
-                          {tech}
+        {/* Projects Table */}
+        <Card>
+          <CardHeader>
+            <CardTitle>All Projects</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              {filteredProjects.length} projects found
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left py-3 px-4 font-medium">Project Name</th>
+                    <th className="text-left py-3 px-4 font-medium">Industry</th>
+                    <th className="text-left py-3 px-4 font-medium">Client</th>
+                    <th className="text-right py-3 px-4 font-medium">Budget</th>
+                    <th className="text-center py-3 px-4 font-medium">Team Size</th>
+                    <th className="text-center py-3 px-4 font-medium">Status</th>
+                    <th className="text-center py-3 px-4 font-medium">Progress</th>
+                    <th className="text-left py-3 px-4 font-medium">Location</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredProjects.map((project: any, index: number) => (
+                    <tr key={index} className="border-b hover:bg-muted/50">
+                      <td className="py-3 px-4">
+                        <div>
+                          <p className="font-medium">{project.name}</p>
+                          <p className="text-xs text-muted-foreground">{project.description.substring(0, 60)}...</p>
+                        </div>
+                      </td>
+                      <td className="py-3 px-4">
+                        <Badge variant="outline" className="text-xs">
+                          {project.industry}
                         </Badge>
-                      ))}
-                      {project.technologies.length > 3 && (
-                        <Badge variant="secondary" className="text-xs">
-                          +{project.technologies.length - 3} more
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                      </td>
+                      <td className="py-3 px-4 font-medium">{project.client}</td>
+                      <td className="py-3 px-4 text-right font-medium">{formatCurrency(project.budget)}</td>
+                      <td className="py-3 px-4 text-center">{project.teamSize}</td>
+                      <td className="py-3 px-4 text-center">
+                        <span className="text-sm font-medium">{project.status}</span>
+                      </td>
+                      <td className="py-3 px-4 text-center">{project.progress}%</td>
+                      <td className="py-3 px-4 text-sm">{project.location}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
 
         {filteredProjects.length === 0 && (
           <div className="text-center py-12">

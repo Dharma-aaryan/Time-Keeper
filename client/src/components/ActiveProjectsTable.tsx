@@ -133,17 +133,10 @@ export default function ActiveProjectsTable() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge className={getStatusColor(project.status)}>
-                      {project.status}
-                    </Badge>
+                    <span className="text-sm">{project.status}</span>
                   </TableCell>
-                  <TableCell>
-                    <div className="w-20">
-                      <Progress value={project.progress} className="h-2" />
-                      <span className="text-xs text-muted-foreground mt-1">
-                        {project.progress}%
-                      </span>
-                    </div>
+                  <TableCell className="text-center">
+                    {project.progress}%
                   </TableCell>
                   <TableCell>{project.team} members</TableCell>
                   <TableCell>{project.budget}</TableCell>

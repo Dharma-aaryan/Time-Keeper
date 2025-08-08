@@ -28,7 +28,7 @@ export default function DatasetOverview() {
     );
   }
 
-  const { projects, stats } = realData;
+  const { projects = [], stats = {} } = realData || {};
 
   const industryIcons: Record<string, any> = {
     'Construction': Building2,

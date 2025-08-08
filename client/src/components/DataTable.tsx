@@ -159,27 +159,10 @@ export default function DataTable() {
                   </td>
                   <td className="py-3 px-4 text-center">{project.teamSize}</td>
                   <td className="py-3 px-4 text-center">
-                    <Badge 
-                      variant={
-                        project.status === 'completed' ? 'default' : 
-                        project.status === 'in-progress' ? 'secondary' :
-                        project.status === 'testing' ? 'outline' : 'secondary'
-                      }
-                      className="text-xs"
-                    >
-                      {project.status}
-                    </Badge>
+                    <span className="text-sm">{project.status}</span>
                   </td>
                   <td className="py-3 px-4 text-center">
-                    <div className="flex items-center justify-center space-x-2">
-                      <div className="w-12 bg-muted rounded-full h-2">
-                        <div 
-                          className="bg-primary h-2 rounded-full transition-all"
-                          style={{ width: `${project.progress}%` }}
-                        />
-                      </div>
-                      <span className="text-xs font-medium">{project.progress}%</span>
-                    </div>
+                    <span className="text-sm">{project.progress}%</span>
                   </td>
                   <td className="py-3 px-4 text-muted-foreground text-xs">{project.location}</td>
                 </tr>

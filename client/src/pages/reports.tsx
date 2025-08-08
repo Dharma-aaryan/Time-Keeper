@@ -122,23 +122,11 @@ export default function Reports() {
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="flex justify-between items-start mb-8">
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Reports</h1>
-            <p className="text-muted-foreground mt-1">
-              Comprehensive project reports and analytics
-            </p>
-          </div>
-          <div className="flex space-x-2">
-            <Button variant="outline" onClick={() => generateReport('executive')}>
-              <Download className="w-4 h-4 mr-2" />
-              Executive Report
-            </Button>
-            <Button variant="outline" onClick={() => generateReport('detailed')}>
-              <Download className="w-4 h-4 mr-2" />
-              Detailed Report
-            </Button>
-          </div>
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-foreground">Reports</h1>
+          <p className="text-muted-foreground mt-1">
+            Comprehensive project reports and analytics
+          </p>
         </div>
 
         {/* Executive Summary */}
@@ -343,23 +331,10 @@ export default function Reports() {
                         </span>
                       </td>
                       <td className="py-3 px-4 text-center">
-                        <div className="flex items-center justify-center space-x-2">
-                          <div className="w-16 bg-muted rounded-full h-2">
-                            <div 
-                              className="bg-primary h-2 rounded-full"
-                              style={{ width: `${project.progress}%` }}
-                            />
-                          </div>
-                          <span className="text-xs">{project.progress}%</span>
-                        </div>
+                        <span className="text-sm">{project.progress}%</span>
                       </td>
                       <td className="py-3 px-4 text-center">
-                        <Badge 
-                          variant={project.status === 'completed' ? 'default' : 'secondary'}
-                          className="text-xs"
-                        >
-                          {project.status}
-                        </Badge>
+                        <span className="text-sm">{project.status}</span>
                       </td>
                       <td className="py-3 px-4 text-center">{project.teamSize}</td>
                     </tr>
