@@ -15,16 +15,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Real project data routes
   app.get('/api/projects/real-data', async (req, res) => {
     try {
-      const { realProjectsData, industryStats } = await import('./data/realProjects');
+      const { realProjects, industryStats } = await import('./data/realProjects');
       res.json({
-        projects: realProjectsData,
+        projects: realProjects,
         stats: industryStats,
         summary: {
-          total: realProjectsData.length,
-          active: realProjectsData.filter(p => p.status === 'in-progress').length,
-          completed: realProjectsData.filter(p => p.status === 'completed').length,
-          testing: realProjectsData.filter(p => p.status === 'testing').length,
-          planning: realProjectsData.filter(p => p.status === 'planning').length
+          total: realProjects.length,
+          active: realProjects.filter(p => p.status === 'in-progress').length,
+          completed: realProjects.filter(p => p.status === 'completed').length,
+          testing: realProjects.filter(p => p.status === 'testing').length,
+          planning: realProjects.filter(p => p.status === 'planning').length
         }
       });
     } catch (error) {
@@ -35,22 +35,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/projects/analytics', async (req, res) => {
     try {
-      const { realProjectsData } = await import('./data/realProjects');
+      const { realProjects } = await import('./data/realProjects');
       
       // Calculate analytics from real data
-      const industryBreakdown = realProjectsData.reduce((acc, project) => {
+      const industryBreakdown = realProjects.reduce((acc, project) => {
         acc[project.industry] = (acc[project.industry] || 0) + 1;
         return acc;
       }, {} as Record<string, number>);
 
-      const budgetAnalysis = realProjectsData.map(p => ({
+      const budgetAnalysis = realProjects.map(p => ({
         name: p.name.substring(0, 15) + '...',
         estimated: p.budget,
         actual: p.actualCost,
         efficiency: Math.round((p.actualCost / p.budget) * 100)
       }));
 
-      const timelineData = realProjectsData.map(p => {
+      const timelineData = realProjects.map(p => {
         const start = new Date(p.startDate);
         const end = new Date(p.endDate);
         const duration = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
@@ -67,10 +67,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         budgetAnalysis,
         timelineData,
         summary: {
-          totalBudget: realProjectsData.reduce((sum, p) => sum + p.budget, 0),
-          totalActualCost: realProjectsData.reduce((sum, p) => sum + p.actualCost, 0),
-          avgTeamSize: Math.round(realProjectsData.reduce((sum, p) => sum + p.teamSize, 0) / realProjectsData.length),
-          avgProgress: Math.round(realProjectsData.reduce((sum, p) => sum + p.progress, 0) / realProjectsData.length)
+          totalBudget: realProjects.reduce((sum, p) => sum + p.budget, 0),
+          totalActualCost: realProjects.reduce((sum, p) => sum + p.actualCost, 0),
+          avgTeamSize: Math.round(realProjects.reduce((sum, p) => sum + p.teamSize, 0) / realProjects.length),
+          avgProgress: Math.round(realProjects.reduce((sum, p) => sum + p.progress, 0) / realProjects.length)
         }
       });
     } catch (error) {

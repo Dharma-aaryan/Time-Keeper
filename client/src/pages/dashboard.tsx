@@ -14,7 +14,7 @@ export default function Dashboard() {
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-foreground">Project Dashboard</h1>
           <p className="text-muted-foreground mt-1">
-            Real-time insights into your project portfolio
+            Real-time overview of 117+ active projects across 8 major industries
           </p>
         </div>
 

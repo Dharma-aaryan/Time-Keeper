@@ -34,7 +34,7 @@ export default function Analytics() {
 
         {/* Data Source Tabs */}
         <Tabs defaultValue="dataset-overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="dataset-overview" className="flex items-center space-x-2">
               <Filter className="w-4 h-4" />
               <span>Dataset Overview</span>
@@ -46,10 +46,6 @@ export default function Analytics() {
             <TabsTrigger value="manual-entry" className="flex items-center space-x-2">
               <Plus className="w-4 h-4" />
               <span>Add Your Project</span>
-            </TabsTrigger>
-            <TabsTrigger value="demo-charts" className="flex items-center space-x-2">
-              <Calendar className="w-4 h-4" />
-              <span>Sample Analytics</span>
             </TabsTrigger>
           </TabsList>
 
@@ -85,58 +81,7 @@ export default function Analytics() {
             </div>
           </TabsContent>
 
-          <TabsContent value="demo-charts">
-            {/* Key Metrics */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Total Projects</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">24</div>
-                  <p className="text-xs text-green-600 font-medium">Sample data</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Active Projects</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">12</div>
-                  <p className="text-xs text-blue-600 font-medium">Demo metrics</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Team Utilization</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">87%</div>
-                  <p className="text-xs text-green-600 font-medium">Example value</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Budget Efficiency</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">92%</div>
-                  <p className="text-xs text-green-600 font-medium">Demonstration</p>
-                </CardContent>
-              </Card>
-            </div>
 
-            {/* Demo Charts */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-              <ProjectEfficiencyChart />
-              <TeamProductivityChart />
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <ResourceUtilizationChart />
-              <ProjectTimelineChart />
-            </div>
-          </TabsContent>
         </Tabs>
       </main>
     </div>
