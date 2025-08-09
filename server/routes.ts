@@ -79,24 +79,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Manual project entry routes
+  // Manual project creation endpoint
   app.post('/api/projects/manual', async (req, res) => {
     try {
-      const projectData = req.body;
-      // For now, store in memory (can be extended to use database)
-      const newProject = {
-        id: `MANUAL_${Date.now()}`,
-        ...projectData,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
+      const { realProjects } = await import('./data/realProjects');
       
-      // In a real implementation, save to database
-      res.json({ success: true, project: newProject });
+      const newProject = {
+        id: `USER_${String(Date.now()).slice(-6)}`,
+        name: req.body.name,
+        industry: req.body.industry,
+        domain: req.body.domain || '',
+        client: req.body.client,
+        status: req.body.status,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate,
+        budget: req.body.budget,
+        actualCost: req.body.budget * 0.8, // Default to 80% of budget
+        teamSize: req.body.teamSize,
+        progress: req.body.progress || 0,
+        priority: req.body.priority,
+        riskLevel: req.body.riskLevel,
+        location: req.body.location || '',
+        description: req.body.description,
+        technologies: req.body.technologies || [],
+        phases: []
+      };
+
+      // Add to the real projects array (in memory for demo)
+      realProjects.push(newProject);
+      
+      res.json({ 
+        success: true, 
+        project: newProject,
+        totalProjects: realProjects.length 
+      });
     } catch (error) {
+      console.error('Error creating project:', error);
       res.status(500).json({ error: 'Failed to create project' });
     }
   });
+
+
 
   // Client routes
   app.get('/api/clients', isAuthenticated, async (req, res) => {

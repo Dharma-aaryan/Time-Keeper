@@ -647,21 +647,26 @@ const additionalProjects = [
     phases: []
   })),
 
-  // Additional Financial Services Projects (10 more)
-  ...Array.from({length: 10}, (_, i) => ({
+  // Additional Financial Services Projects (20 more)
+  ...Array.from({length: 20}, (_, i) => ({
     id: `FIN_${String(i + 2).padStart(3, '0')}`,
     name: [
       'Digital Banking Platform', 'Risk Management System', 'Fraud Detection Engine',
       'Mobile Payment Solution', 'Investment Portfolio Manager', 'Credit Scoring Model',
       'Regulatory Compliance Platform', 'Customer Analytics Dashboard',
-      'Trading Automation System', 'Insurance Claims Processing'
+      'Trading Automation System', 'Insurance Claims Processing', 'Robo-Advisory Platform',
+      'Cryptocurrency Exchange', 'Loan Origination System', 'Portfolio Analytics Tool',
+      'Credit Risk Assessment', 'Financial Planning Software', 'Wealth Management Portal',
+      'Tax Preparation System', 'Corporate Banking Suite', 'Investment Research Platform'
     ][i],
     industry: 'Financial Services',
     domain: ['Digital Banking', 'Risk Management', 'Fintech', 'Insurance'][i % 4],
     client: [
       'Goldman Sachs', 'Morgan Stanley', 'Wells Fargo', 'Bank of America',
       'Citigroup', 'American Express', 'Capital One', 'Charles Schwab',
-      'Fidelity Investments', 'BlackRock Inc'
+      'Fidelity Investments', 'BlackRock Inc', 'Visa Inc', 'Mastercard',
+      'PayPal Holdings', 'Square Inc', 'Coinbase', 'Robinhood', 'E*TRADE',
+      'TD Ameritrade', 'Interactive Brokers', 'Ally Financial'
     ][i],
     status: ['planning', 'in-progress', 'testing', 'completed', 'on-hold'][i % 5],
     startDate: `2024-${String(Math.floor(i/2) + 1).padStart(2, '0')}-01`,
@@ -675,7 +680,9 @@ const additionalProjects = [
     location: [
       'New York, NY', 'New York, NY', 'San Francisco, CA', 'Charlotte, NC',
       'New York, NY', 'New York, NY', 'McLean, VA', 'Westlake, TX',
-      'Boston, MA', 'New York, NY'
+      'Boston, MA', 'New York, NY', 'Foster City, CA', 'Purchase, NY',
+      'San Jose, CA', 'San Francisco, CA', 'San Francisco, CA', 'Menlo Park, CA',
+      'Arlington, VA', 'Omaha, NE', 'Greenwich, CT', 'Detroit, MI'
     ][i],
     description: `Financial technology solution enhancing security and customer experience`,
     technologies: ['Blockchain', 'Machine Learning', 'Cybersecurity', 'Mobile Development'],
@@ -683,8 +690,45 @@ const additionalProjects = [
   }))
 ];
 
+// E-commerce & Retail Projects (15 more)
+const ecommerceProjects = Array.from({length: 15}, (_, i) => ({
+  id: `ECOM_${String(i + 1).padStart(3, '0')}`,
+  name: [
+    'Omnichannel Commerce Platform', 'Supply Chain Optimization', 'Customer Loyalty System',
+    'Inventory Management Suite', 'AI Recommendation Engine', 'Mobile Shopping App',
+    'Warehouse Automation', 'Point of Sale Upgrade', 'Price Optimization Tool',
+    'Social Commerce Integration', 'Voice Commerce Platform', 'AR Virtual Showroom',
+    'Marketplace Integration', 'Subscription Management', 'Returns Processing System'
+  ][i],
+  industry: 'Technology',
+  domain: 'E-commerce',
+  client: [
+    'Amazon', 'Walmart', 'Target', 'Best Buy', 'Home Depot',
+    'Costco', 'Macys', 'Nike', 'Adidas', 'Apple',
+    'Samsung', 'Sony', 'eBay', 'Shopify', 'Etsy'
+  ][i],
+  status: ['planning', 'in-progress', 'testing', 'completed', 'on-hold'][i % 5],
+  startDate: `2024-${String(Math.floor(i/3) + 1).padStart(2, '0')}-15`,
+  endDate: `2025-${String(Math.floor(i/3) + 4).padStart(2, '0')}-15`,
+  budget: Math.floor(Math.random() * 8000000) + 2000000,
+  actualCost: Math.floor(Math.random() * 7000000) + 1800000,
+  teamSize: Math.floor(Math.random() * 35) + 12,
+  progress: Math.floor(Math.random() * 100),
+  priority: ['low', 'medium', 'high'][i % 3],
+  riskLevel: ['low', 'medium', 'high'][i % 3],
+  location: [
+    'Seattle, WA', 'Bentonville, AR', 'Minneapolis, MN', 'Richfield, MN',
+    'Atlanta, GA', 'Issaquah, WA', 'Cincinnati, OH', 'Beaverton, OR',
+    'Herzogenaurach, Germany', 'Cupertino, CA', 'Seoul, South Korea', 'Tokyo, Japan',
+    'San Jose, CA', 'Ottawa, ON', 'Brooklyn, NY'
+  ][i],
+  description: `Next-generation retail technology enhancing customer experience and operational efficiency`,
+  technologies: ['React', 'Node.js', 'Kubernetes', 'AI/ML', 'Microservices'],
+  phases: []
+}));
+
 // Combine original and additional projects
-export const realProjects = [...realProjectsData, ...additionalProjects];
+export const realProjects = [...realProjectsData, ...additionalProjects, ...ecommerceProjects];
 
 export const industryStats = {
   'Construction': { totalProjects: 3847, avgBudget: 28966667, avgDuration: 456 },

@@ -76,13 +76,16 @@ export default function ManualProjectForm() {
       
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
       toast({
-        title: "Project Created Successfully",
-        description: "Your project has been added to the analytics dashboard.",
+        title: "Project Added Successfully",
+        description: `Your project has been added to the dataset. Total projects: ${result.totalProjects}`,
       });
       form.reset();
       setTechTags([]);
+      
+      // Invalidate queries to refresh data
+      queryClient.invalidateQueries({ queryKey: ['/api/projects/real-data'] });
       queryClient.invalidateQueries({ queryKey: ['/api/projects/analytics'] });
     },
     onError: () => {
