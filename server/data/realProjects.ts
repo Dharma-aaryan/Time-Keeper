@@ -27,7 +27,7 @@ export interface ProjectData {
 }
 
 // Data sourced from construction permits, clinical trials, manufacturing datasets, and software projects
-export const realProjectsData: ProjectData[] = [
+const baseProjectsData: ProjectData[] = [
   // Construction Industry - Based on SF Open Data Building Permits
   {
     id: 'CONST_001',
@@ -728,10 +728,8 @@ const ecommerceProjects = Array.from({length: 15}, (_, i) => ({
 }));
 
 // Combine original and additional projects
-export const realProjects = [...realProjectsData, ...additionalProjects, ...ecommerceProjects];
-
-// Export realProjectsData as an alias to realProjects for backward compatibility
-export { realProjects as realProjectsData };
+export const realProjects = [...baseProjectsData, ...additionalProjects, ...ecommerceProjects];
+export const realProjectsData = realProjects;
 
 export const industryStats = {
   'Construction': { totalProjects: 3847, avgBudget: 28966667, avgDuration: 456 },
