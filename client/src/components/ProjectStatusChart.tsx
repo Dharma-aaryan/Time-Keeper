@@ -1,13 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import { useQuery } from "@tanstack/react-query";
 
-const data = [
-  { name: "In Progress", value: 8, color: "#3b82f6" },
-  { name: "Planning", value: 3, color: "#f59e0b" },
-  { name: "Testing", value: 2, color: "#8b5cf6" },
-  { name: "Completed", value: 5, color: "#10b981" },
-  { name: "On Hold", value: 1, color: "#ef4444" },
-];
+const statusColors = {
+  "in-progress": "#3b82f6",
+  "planning": "#f59e0b", 
+  "testing": "#8b5cf6",
+  "completed": "#10b981",
+  "on-hold": "#ef4444"
+};
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
@@ -33,13 +34,54 @@ const renderCustomizedLabel = ({
 };
 
 export default function ProjectStatusChart() {
+  const { data: realData, isLoading } = useQuery({
+    queryKey: ['/api/projects/real-data']
+  });
+
+  if (isLoading || !realData) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Project Status Distribution</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="animate-pulse">
+            <div className="h-64 bg-muted rounded mb-4"></div>
+            <div className="space-y-2">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="h-4 bg-muted rounded"></div>
+              ))}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  const { projects = [] } = (realData as any) || {};
+  
+  // Calculate status distribution from real data
+  const statusCounts = projects.reduce((acc: any, project: any) => {
+    const status = project.status;
+    acc[status] = (acc[status] || 0) + 1;
+    return acc;
+  }, {});
+
+  const data = Object.entries(statusCounts).map(([status, count]) => ({
+    name: status.split('-').map((word: string) => 
+      word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(' '),
+    value: count as number,
+    color: statusColors[status as keyof typeof statusColors] || "#6b7280"
+  }));
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Project Status Distribution</CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={250}>
+        <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie
               data={data}
@@ -47,7 +89,7 @@ export default function ProjectStatusChart() {
               cy="50%"
               labelLine={false}
               label={renderCustomizedLabel}
-              outerRadius={80}
+              outerRadius={100}
               fill="#8884d8"
               dataKey="value"
             >

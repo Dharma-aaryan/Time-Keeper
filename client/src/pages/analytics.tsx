@@ -34,7 +34,7 @@ export default function Analytics() {
 
         {/* Data Source Tabs */}
         <Tabs defaultValue="dataset-overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="dataset-overview" className="flex items-center space-x-2">
               <Filter className="w-4 h-4" />
               <span>Dataset Overview</span>
@@ -42,10 +42,6 @@ export default function Analytics() {
             <TabsTrigger value="real-data" className="flex items-center space-x-2">
               <Database className="w-4 h-4" />
               <span>Real Industry Data</span>
-            </TabsTrigger>
-            <TabsTrigger value="manual-entry" className="flex items-center space-x-2">
-              <Plus className="w-4 h-4" />
-              <span>Add Your Project</span>
             </TabsTrigger>
           </TabsList>
 
@@ -62,22 +58,6 @@ export default function Analytics() {
           <TabsContent value="dataset-overview">
             <div className="space-y-6">
               <DatasetOverview />
-            </div>
-          </TabsContent>
-
-          <TabsContent value="manual-entry">
-            <div className="space-y-8">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Add Your Project Data</CardTitle>
-                  <p className="text-sm text-muted-foreground">
-                    Enter your project information to see it integrated with our analytics
-                  </p>
-                </CardHeader>
-                <CardContent>
-                  <ManualProjectForm />
-                </CardContent>
-              </Card>
             </div>
           </TabsContent>
 

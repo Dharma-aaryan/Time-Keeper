@@ -237,18 +237,18 @@ export default function Reports() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={400}>
                 <RechartsPieChart>
                   <Pie
                     data={industryChartData}
                     cx="50%"
                     cy="50%"
-                    labelLine={false}
-                    label={({ name, value }) => `${name}: ${value}`}
-                    outerRadius={100}
+                    labelLine={true}
+                    label={({ name, value, percent }) => `${name}: ${value} (${(percent * 100).toFixed(1)}%)`}
+                    outerRadius={140}
                     fill="#8884d8"
                     dataKey="value"
-                    fontSize={11}
+                    fontSize={10}
                   >
                     {industryChartData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.fill} />
