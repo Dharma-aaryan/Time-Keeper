@@ -237,26 +237,43 @@ export default function Reports() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
-                <RechartsPieChart>
-                  <Pie
-                    data={industryChartData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={true}
-                    label={({ name, value, percent }) => `${name}: ${value} (${(percent * 100).toFixed(1)}%)`}
-                    outerRadius={140}
-                    fill="#8884d8"
-                    dataKey="value"
-                    fontSize={10}
-                  >
+              <div className="flex items-center">
+                <div className="flex-1">
+                  <ResponsiveContainer width="100%" height={400}>
+                    <RechartsPieChart>
+                      <Pie
+                        data={industryChartData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        outerRadius={120}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {industryChartData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.fill} />
+                        ))}
+                      </Pie>
+                      <Tooltip formatter={(value: number, name: string) => [`${value} projects`, name]} />
+                    </RechartsPieChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="w-48 ml-4">
+                  <h4 className="font-medium text-sm mb-3">Industries</h4>
+                  <div className="space-y-2">
                     {industryChartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                      <div key={index} className="flex items-center text-sm">
+                        <div 
+                          className="w-3 h-3 rounded-full mr-2 flex-shrink-0" 
+                          style={{ backgroundColor: entry.fill }}
+                        ></div>
+                        <span className="text-muted-foreground truncate">{entry.name}</span>
+                        <span className="ml-auto font-medium">{entry.value}</span>
+                      </div>
                     ))}
-                  </Pie>
-                  <Tooltip />
-                </RechartsPieChart>
-              </ResponsiveContainer>
+                  </div>
+                </div>
+              </div>
             </CardContent>
           </Card>
 
