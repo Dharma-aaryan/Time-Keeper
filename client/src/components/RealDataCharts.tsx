@@ -103,33 +103,42 @@ export default function RealDataCharts({ data }: RealDataChartsProps) {
             </p>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={industryChartData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, value }) => `${name}: ${value}`}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                  fontSize={11}
-                >
+            <div className="flex items-center">
+              <div className="flex-1">
+                <ResponsiveContainer width="100%" height={350}>
+                  <PieChart>
+                    <Pie
+                      data={industryChartData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      outerRadius={100}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {industryChartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value: number, name: string) => [`${value} projects`, name]} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="w-48 ml-4">
+                <h4 className="font-medium text-sm mb-3">Industries</h4>
+                <div className="space-y-2">
                   {industryChartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+                    <div key={index} className="flex items-center text-sm">
+                      <div 
+                        className="w-3 h-3 rounded-full mr-2 flex-shrink-0" 
+                        style={{ backgroundColor: entry.color }}
+                      ></div>
+                      <span className="text-muted-foreground truncate">{entry.name}</span>
+                      <span className="ml-auto font-medium">{entry.value}</span>
+                    </div>
                   ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-            
-            <div className="mt-4 flex flex-wrap gap-2">
-              {Object.entries(industryBreakdown).map(([industry, count]) => (
-                <Badge key={industry} variant="secondary" className="text-xs">
-                  {industry}: {count as number}
-                </Badge>
-              ))}
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
