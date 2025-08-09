@@ -9,6 +9,7 @@ import { useState } from "react";
 
 export default function Projects() {
   const [filter, setFilter] = useState('all');
+  const [displayCount, setDisplayCount] = useState(10);
   
   const { data: projectData, isLoading } = useQuery({
     queryKey: ['/api/projects/real-data']
@@ -49,6 +50,9 @@ export default function Projects() {
   const filteredProjects = filter === 'all' 
     ? projects 
     : projects.filter((p: any) => p.status === filter);
+    
+  const displayedProjects = filteredProjects.slice(0, displayCount);
+  const hasMoreProjects = filteredProjects.length > displayCount;
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -177,7 +181,7 @@ export default function Projects() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredProjects.map((project: any, index: number) => (
+                  {displayedProjects.map((project: any, index: number) => (
                     <tr key={index} className="border-b hover:bg-muted/50">
                       <td className="py-3 px-4">
                         <div>
@@ -203,6 +207,17 @@ export default function Projects() {
                 </tbody>
               </table>
             </div>
+            {hasMoreProjects && (
+              <div className="mt-6 text-center">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setDisplayCount(prev => prev + 10)}
+                  className="px-8"
+                >
+                  Show More ({filteredProjects.length - displayCount} remaining)
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
 

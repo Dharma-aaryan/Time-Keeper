@@ -170,8 +170,8 @@ export default function RealDataCharts({ data }: RealDataChartsProps) {
                   formatter={(value: number) => [formatCurrency(value), '']}
                 />
                 <Legend />
-                <Bar dataKey="estimated" fill="hsl(var(--primary))" name="Estimated Budget" />
-                <Bar dataKey="actual" fill="hsl(var(--chart-2))" name="Actual Cost" />
+                <Bar dataKey="estimated" fill="#3b82f6" name="Estimated Budget" />
+                <Bar dataKey="actual" fill="#ef4444" name="Actual Cost" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -203,16 +203,18 @@ export default function RealDataCharts({ data }: RealDataChartsProps) {
                   type="monotone" 
                   dataKey="duration" 
                   stackId="1" 
-                  stroke="hsl(var(--primary))" 
-                  fill="hsl(var(--primary))"
+                  stroke="#8b5cf6" 
+                  fill="#8b5cf6"
+                  fillOpacity={0.6}
                   name="Duration (days)"
                 />
                 <Area 
                   type="monotone" 
                   dataKey="progress" 
                   stackId="2" 
-                  stroke="hsl(var(--chart-3))" 
-                  fill="hsl(var(--chart-3))"
+                  stroke="#10b981" 
+                  fill="#10b981"
+                  fillOpacity={0.6}
                   name="Progress %"
                 />
               </AreaChart>
