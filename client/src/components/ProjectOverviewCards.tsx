@@ -1,88 +1,90 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { TrendingUp, TrendingDown, Clock, Users, DollarSign, Target } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
 
 export default function ProjectOverviewCards() {
-  const stats = [
-    {
-      title: "Active Projects",
-      value: "12",
-      change: "+2",
-      changeType: "increase",
-      icon: Target,
-      color: "blue",
-    },
-    {
-      title: "Team Members",
-      value: "28",
-      change: "+4",
-      changeType: "increase", 
-      icon: Users,
-      color: "green",
-    },
-    {
-      title: "Total Hours",
-      value: "1,248",
-      change: "+156",
-      changeType: "increase",
-      icon: Clock,
-      color: "purple",
-    },
-    {
-      title: "Budget Used",
-      value: "$89.2k",
-      change: "-2.1%",
-      changeType: "decrease",
-      icon: DollarSign,
-      color: "orange",
-    },
-  ];
+  const { data: realData, isLoading } = useQuery({
+    queryKey: ['/api/projects/real-data']
+  });
 
-  const getColorClasses = (color: string) => {
-    switch (color) {
-      case "blue":
-        return "bg-blue-50 text-blue-600";
-      case "green":
-        return "bg-green-50 text-green-600";
-      case "purple":
-        return "bg-purple-50 text-purple-600";
-      case "orange":
-        return "bg-orange-50 text-orange-600";
-      default:
-        return "bg-gray-50 text-gray-600";
-    }
+  if (isLoading || !realData) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {[...Array(4)].map((_, i) => (
+          <Card key={i}>
+            <CardHeader className="pb-3">
+              <div className="animate-pulse h-4 bg-muted rounded w-24"></div>
+            </CardHeader>
+            <CardContent>
+              <div className="animate-pulse h-8 bg-muted rounded w-16 mb-2"></div>
+              <div className="animate-pulse h-3 bg-muted rounded w-20"></div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    );
+  }
+
+  const { projects = [], summary = {} } = (realData as any) || {};
+  const totalBudget = projects.reduce((sum: number, p: any) => sum + p.budget, 0);
+  const totalActual = projects.reduce((sum: number, p: any) => sum + p.actualCost, 0);
+  const avgTeamSize = Math.round(projects.reduce((sum: number, p: any) => sum + p.teamSize, 0) / projects.length);
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
   };
+
+  const activeProjects = projects.filter((p: any) => p.status === 'in-progress').length;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      {stats.map((stat, index) => {
-        const Icon = stat.icon;
-        return (
-          <Card key={index}>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
-                  <p className="text-2xl font-bold text-foreground mt-1">{stat.value}</p>
-                </div>
-                <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${getColorClasses(stat.color)}`}>
-                  <Icon className="w-6 h-6" />
-                </div>
-              </div>
-              <div className="mt-4 flex items-center text-sm">
-                {stat.changeType === "increase" ? (
-                  <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
-                ) : (
-                  <TrendingDown className="w-4 h-4 text-red-500 mr-1" />
-                )}
-                <span className={stat.changeType === "increase" ? "text-green-600 font-medium" : "text-red-600 font-medium"}>
-                  {stat.change}
-                </span>
-                <span className="text-muted-foreground ml-1">from last month</span>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      })}
+      {/* Total Projects */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm font-medium text-muted-foreground">Total Projects</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{projects.length}</div>
+          <p className="text-xs text-green-600 font-medium">Across 8 industries</p>
+        </CardContent>
+      </Card>
+
+      {/* Active Projects */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm font-medium text-muted-foreground">Active Projects</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{activeProjects}</div>
+          <p className="text-xs text-blue-600 font-medium">Currently in progress</p>
+        </CardContent>
+      </Card>
+
+      {/* Average Team Size */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm font-medium text-muted-foreground">Average Team Size</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{avgTeamSize}</div>
+          <p className="text-xs text-green-600 font-medium">Team members</p>
+        </CardContent>
+      </Card>
+
+      {/* Total Budget */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm font-medium text-muted-foreground">Total Budget</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{formatCurrency(totalBudget)}</div>
+          <p className="text-xs text-green-600 font-medium">Portfolio value</p>
+        </CardContent>
+      </Card>
     </div>
   );
 }
