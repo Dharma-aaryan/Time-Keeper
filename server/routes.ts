@@ -1,7 +1,9 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { FirebaseStorage } from "./firebaseStorage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
+import { getStorageType } from "./config";
 import {
   insertClientSchema,
   insertProjectSchema,
@@ -11,22 +13,54 @@ import {
 } from "@shared/schema";
 import { z } from "zod";
 
+// Initialize Firebase storage if configured
+let firebaseStorage: FirebaseStorage | null = null;
+const storageType = getStorageType();
+
+if (storageType === 'firebase') {
+  try {
+    firebaseStorage = new FirebaseStorage();
+    console.log('✅ Firebase storage initialized');
+  } catch (error) {
+    console.warn('⚠️ Firebase initialization failed:', error);
+  }
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Real project data routes
   app.get('/api/projects/real-data', async (req, res) => {
     try {
-      const { realProjects, industryStats } = await import('./data/realProjects');
-      res.json({
-        projects: realProjects,
-        stats: industryStats,
-        summary: {
+      let projects, stats, summary;
+      
+      if (firebaseStorage) {
+        // Use Firebase data
+        const firebaseProjects = await firebaseStorage.getProjects();
+        projects = firebaseProjects;
+        
+        // Calculate stats from Firebase data
+        stats = {};
+        summary = {
+          total: firebaseProjects.length,
+          active: firebaseProjects.filter((p: any) => p.status === 'in-progress').length,
+          completed: firebaseProjects.filter((p: any) => p.status === 'completed').length,
+          testing: firebaseProjects.filter((p: any) => p.status === 'testing').length,
+          planning: firebaseProjects.filter((p: any) => p.status === 'planning').length
+        };
+      } else {
+        // Use local data as fallback
+        const { realProjects, industryStats } = await import('./data/realProjects');
+        projects = realProjects;
+        stats = industryStats;
+        summary = {
           total: realProjects.length,
           active: realProjects.filter(p => p.status === 'in-progress').length,
           completed: realProjects.filter(p => p.status === 'completed').length,
           testing: realProjects.filter(p => p.status === 'testing').length,
           planning: realProjects.filter(p => p.status === 'planning').length
-        }
-      });
+        };
+      }
+      
+      res.json({ projects, stats, summary });
     } catch (error) {
       console.error('Error loading project data:', error);
       res.status(500).json({ error: 'Failed to load project data' });
@@ -35,44 +69,124 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/projects/analytics', async (req, res) => {
     try {
+      if (firebaseStorage) {
+        // Use Firebase analytics
+        const analytics = await firebaseStorage.getAnalytics();
+        res.json(analytics);
+      } else {
+        // Use local data as fallback
+        const { realProjects } = await import('./data/realProjects');
+        
+        // Calculate analytics from real data
+        const industryBreakdown = realProjects.reduce((acc, project) => {
+          acc[project.industry] = (acc[project.industry] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>);
+
+        const budgetAnalysis = realProjects.map(p => ({
+          name: p.name.substring(0, 15) + '...',
+          estimated: p.budget,
+          actual: p.actualCost,
+          efficiency: Math.round((p.actualCost / p.budget) * 100)
+        }));
+
+        const timelineData = realProjects.map(p => {
+          const start = new Date(p.startDate);
+          const end = new Date(p.endDate);
+          const duration = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+          return {
+            name: p.name.substring(0, 20),
+            duration,
+            progress: p.progress,
+            industry: p.industry
+          };
+        });
+
+        res.json({
+          industryBreakdown,
+          budgetAnalysis,
+          timelineData,
+          summary: {
+            totalBudget: realProjects.reduce((sum, p) => sum + p.budget, 0),
+            totalActualCost: realProjects.reduce((sum, p) => sum + p.actualCost, 0),
+            avgTeamSize: Math.round(realProjects.reduce((sum, p) => sum + p.teamSize, 0) / realProjects.length),
+            avgProgress: Math.round(realProjects.reduce((sum, p) => sum + p.progress, 0) / realProjects.length)
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error loading analytics data:', error);
+      res.status(500).json({ error: 'Failed to load analytics data' });
+    }
+  });
+
+  // Firebase project management routes
+  app.post('/api/projects/firebase', async (req, res) => {
+    try {
+      if (!firebaseStorage) {
+        return res.status(400).json({ error: 'Firebase not configured' });
+      }
+
+      const project = await firebaseStorage.createProject(req.body);
+      res.json(project);
+    } catch (error) {
+      console.error('Error creating project in Firebase:', error);
+      res.status(500).json({ error: 'Failed to create project' });
+    }
+  });
+
+  app.put('/api/projects/firebase/:id', async (req, res) => {
+    try {
+      if (!firebaseStorage) {
+        return res.status(400).json({ error: 'Firebase not configured' });
+      }
+
+      const project = await firebaseStorage.updateProject(req.params.id, req.body);
+      res.json(project);
+    } catch (error) {
+      console.error('Error updating project in Firebase:', error);
+      res.status(500).json({ error: 'Failed to update project' });
+    }
+  });
+
+  app.delete('/api/projects/firebase/:id', async (req, res) => {
+    try {
+      if (!firebaseStorage) {
+        return res.status(400).json({ error: 'Firebase not configured' });
+      }
+
+      await firebaseStorage.deleteProject(req.params.id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting project from Firebase:', error);
+      res.status(500).json({ error: 'Failed to delete project' });
+    }
+  });
+
+  // Seed data to Firebase (one-time operation)
+  app.post('/api/projects/seed-firebase', async (req, res) => {
+    try {
+      if (!firebaseStorage) {
+        return res.status(400).json({ error: 'Firebase not configured' });
+      }
+
       const { realProjects } = await import('./data/realProjects');
-      
-      // Calculate analytics from real data
-      const industryBreakdown = realProjects.reduce((acc, project) => {
-        acc[project.industry] = (acc[project.industry] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
+      await firebaseStorage.seedProjectData(realProjects);
+      res.json({ success: true, message: `Seeded ${realProjects.length} projects to Firebase` });
+    } catch (error) {
+      console.error('Error seeding data to Firebase:', error);
+      res.status(500).json({ error: 'Failed to seed data' });
+    }
+  });
 
-      const budgetAnalysis = realProjects.map(p => ({
-        name: p.name.substring(0, 15) + '...',
-        estimated: p.budget,
-        actual: p.actualCost,
-        efficiency: Math.round((p.actualCost / p.budget) * 100)
-      }));
-
-      const timelineData = realProjects.map(p => {
-        const start = new Date(p.startDate);
-        const end = new Date(p.endDate);
-        const duration = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-        return {
-          name: p.name.substring(0, 20),
-          duration,
-          progress: p.progress,
-          industry: p.industry
-        };
-      });
-
-      res.json({
-        industryBreakdown,
-        budgetAnalysis,
-        timelineData,
-        summary: {
-          totalBudget: realProjects.reduce((sum, p) => sum + p.budget, 0),
-          totalActualCost: realProjects.reduce((sum, p) => sum + p.actualCost, 0),
-          avgTeamSize: Math.round(realProjects.reduce((sum, p) => sum + p.teamSize, 0) / realProjects.length),
-          avgProgress: Math.round(realProjects.reduce((sum, p) => sum + p.progress, 0) / realProjects.length)
-        }
-      });
+  // Get storage status
+  app.get('/api/storage/status', (req, res) => {
+    res.json({
+      storageType: getStorageType(),
+      firebaseEnabled: !!firebaseStorage,
+      message: firebaseStorage ? 'Firebase connected' : 'Using local storage'
+    });
+  });
     } catch (error) {
       console.error('Error calculating analytics:', error);
       res.status(500).json({ error: 'Failed to calculate analytics' });

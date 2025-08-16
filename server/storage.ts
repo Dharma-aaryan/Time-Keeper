@@ -24,21 +24,25 @@ import { eq, desc, and, gte, lte, sql } from "drizzle-orm";
 // Interface for storage operations
 export interface IStorage {
   // User operations (mandatory for Replit Auth)
-  getUser(id: string): Promise<User | undefined>;
-  upsertUser(user: UpsertUser): Promise<User>;
+  getUser?(id: string): Promise<User | undefined>;
+  upsertUser?(user: UpsertUser): Promise<User>;
   
   // Client operations
-  getClients(): Promise<Client[]>;
-  createClient(client: InsertClient): Promise<Client>;
-  updateClient(id: string, client: Partial<InsertClient>): Promise<Client>;
-  deleteClient(id: string): Promise<void>;
+  getClients?(): Promise<Client[]>;
+  createClient?(client: InsertClient): Promise<Client>;
+  updateClient?(id: string, client: Partial<InsertClient>): Promise<Client>;
+  deleteClient?(id: string): Promise<void>;
   
   // Project operations
-  getProjects(): Promise<Project[]>;
-  getProjectsByUser(userId: string): Promise<Project[]>;
-  createProject(project: InsertProject): Promise<Project>;
-  updateProject(id: string, project: Partial<InsertProject>): Promise<Project>;
-  deleteProject(id: string): Promise<void>;
+  getProjects(): Promise<any[]>;
+  getProject?(id: string): Promise<any>;
+  getProjectsByUser?(userId: string): Promise<Project[]>;
+  createProject?(project: any): Promise<any>;
+  updateProject?(id: string, project: any): Promise<any>;
+  deleteProject?(id: string): Promise<void>;
+  
+  // Analytics operations
+  getAnalytics?(): Promise<any>;
   
   // Time entry operations
   getTimeEntries(userId: string): Promise<TimeEntry[]>;
