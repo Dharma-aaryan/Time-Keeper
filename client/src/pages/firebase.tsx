@@ -176,6 +176,29 @@ export default function Firebase() {
                     <RefreshCw className="w-4 h-4 mr-2" />
                     Refresh Data
                   </Button>
+
+                  <Button 
+                    variant="outline"
+                    onClick={async () => {
+                      try {
+                        const response = await fetch('/api/storage/status');
+                        const status = await response.json();
+                        toast({
+                          title: "Connection Status",
+                          description: `Firebase: ${status.firebaseEnabled ? 'Connected' : 'Disconnected'} | Storage: ${status.storageType}`
+                        });
+                      } catch (error) {
+                        toast({
+                          title: "Test Failed",
+                          description: "Could not check Firebase connection",
+                          variant: "destructive"
+                        });
+                      }
+                    }}
+                  >
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Test Connection
+                  </Button>
                 </div>
                 
                 <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
@@ -185,6 +208,17 @@ export default function Firebase() {
                     and NASA to your Firebase database. This is a one-time operation that populates your database 
                     with authentic project data.
                   </p>
+                </div>
+                
+                <div className="mt-4 p-4 bg-green-50 dark:bg-green-950 rounded-lg">
+                  <h4 className="font-medium text-green-900 dark:text-green-100">How to Check Your Firebase Database</h4>
+                  <ol className="list-decimal list-inside text-sm text-green-700 dark:text-green-300 mt-2 space-y-1">
+                    <li>Go to <a href="https://console.firebase.google.com" target="_blank" rel="noopener noreferrer" className="underline">Firebase Console</a></li>
+                    <li>Select your project ({process.env.FIREBASE_PROJECT_ID || 'your-project'})</li>
+                    <li>Click on "Firestore Database" in the left sidebar</li>
+                    <li>Look for collections: "projects", "clients", "analytics"</li>
+                    <li>Browse documents to see your seeded data</li>
+                  </ol>
                 </div>
               </CardContent>
             </Card>
