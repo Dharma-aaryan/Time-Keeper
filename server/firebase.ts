@@ -20,10 +20,18 @@ if (getApps().length === 0) {
   } 
   // For production with individual environment variables
   else if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_PRIVATE_KEY && process.env.FIREBASE_CLIENT_EMAIL) {
+    let privateKey = process.env.FIREBASE_PRIVATE_KEY;
+    
+    // Check if private key needs PEM formatting
+    if (!privateKey.includes('-----BEGIN') && !privateKey.includes('-----END')) {
+      // Add PEM headers if missing
+      privateKey = `-----BEGIN PRIVATE KEY-----\n${privateKey}\n-----END PRIVATE KEY-----`;
+    }
+    
     firebaseApp = initializeApp({
       credential: cert({
         projectId: process.env.FIREBASE_PROJECT_ID,
-        privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        privateKey: privateKey.replace(/\\n/g, '\n'),
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
       }),
       projectId: process.env.FIREBASE_PROJECT_ID

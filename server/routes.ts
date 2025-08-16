@@ -21,8 +21,19 @@ if (storageType === 'firebase') {
   try {
     firebaseStorage = new FirebaseStorage();
     console.log('✅ Firebase storage initialized');
+    
+    // Test Firebase connection
+    setTimeout(async () => {
+      try {
+        const { testFirebaseConnection } = await import('./testFirebase');
+        await testFirebaseConnection();
+      } catch (err) {
+        console.error('Firebase test failed:', err);
+      }
+    }, 1000);
   } catch (error) {
     console.warn('⚠️ Firebase initialization failed:', error);
+    console.warn('Falling back to local storage');
   }
 }
 
@@ -186,11 +197,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       firebaseEnabled: !!firebaseStorage,
       message: firebaseStorage ? 'Firebase connected' : 'Using local storage'
     });
-  });
-    } catch (error) {
-      console.error('Error calculating analytics:', error);
-      res.status(500).json({ error: 'Failed to calculate analytics' });
-    }
   });
 
   // Manual project creation endpoint

@@ -56,7 +56,6 @@ export class FirebaseStorage implements IStorage {
   async deleteProject(id: string) {
     try {
       await db.collection(collections.projects).doc(id).delete();
-      return true;
     } catch (error) {
       console.error('Error deleting project from Firebase:', error);
       throw error;
@@ -120,7 +119,16 @@ export class FirebaseStorage implements IStorage {
   async getClients() {
     try {
       const snapshot = await db.collection(collections.clients).get();
-      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      return snapshot.docs.map(doc => ({ 
+        id: doc.id, 
+        name: doc.data().name || '',
+        email: doc.data().email || null,
+        phone: doc.data().phone || null,
+        address: doc.data().address || null,
+        createdAt: doc.data().createdAt || null,
+        updatedAt: doc.data().updatedAt || null,
+        ...doc.data() 
+      }));
     } catch (error) {
       console.error('Error getting clients from Firebase:', error);
       return [];
