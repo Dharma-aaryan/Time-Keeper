@@ -22,10 +22,11 @@ if (getApps().length === 0) {
   else if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_PRIVATE_KEY && process.env.FIREBASE_CLIENT_EMAIL) {
     let privateKey = process.env.FIREBASE_PRIVATE_KEY;
     
-    // Check if private key needs PEM formatting
+    // Format private key properly
     if (!privateKey.includes('-----BEGIN') && !privateKey.includes('-----END')) {
-      // Add PEM headers if missing
-      privateKey = `-----BEGIN PRIVATE KEY-----\n${privateKey}\n-----END PRIVATE KEY-----`;
+      // Split the key into 64-character chunks for proper PEM formatting
+      const keyBody = privateKey.match(/.{1,64}/g)?.join('\n') || privateKey;
+      privateKey = `-----BEGIN PRIVATE KEY-----\n${keyBody}\n-----END PRIVATE KEY-----`;
     }
     
     firebaseApp = initializeApp({

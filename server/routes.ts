@@ -13,29 +13,10 @@ import {
 } from "@shared/schema";
 import { z } from "zod";
 
-// Initialize Firebase storage if configured
-let firebaseStorage: FirebaseStorage | null = null;
-const storageType = getStorageType();
-
-if (storageType === 'firebase') {
-  try {
-    firebaseStorage = new FirebaseStorage();
-    console.log('✅ Firebase storage initialized');
-    
-    // Test Firebase connection
-    setTimeout(async () => {
-      try {
-        const { testFirebaseConnection } = await import('./testFirebase');
-        await testFirebaseConnection();
-      } catch (err) {
-        console.error('Firebase test failed:', err);
-      }
-    }, 1000);
-  } catch (error) {
-    console.warn('⚠️ Firebase initialization failed:', error);
-    console.warn('Falling back to local storage');
-  }
-}
+// Firebase disabled temporarily due to authentication issues
+const firebaseStorage = null;
+const storageType = 'memory';
+console.log('Using local storage for data');
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Real project data routes
@@ -44,9 +25,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       let projects, stats, summary;
       
       if (firebaseStorage) {
-        // Use Firebase data
-        const firebaseProjects = await firebaseStorage.getProjects();
-        projects = firebaseProjects;
+        try {
+          // Use Firebase data
+          const firebaseProjects = await firebaseStorage.getProjects();
+          projects = firebaseProjects;
         
         // Calculate stats from Firebase data
         stats = {};
@@ -57,6 +39,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
           testing: firebaseProjects.filter((p: any) => p.status === 'testing').length,
           planning: firebaseProjects.filter((p: any) => p.status === 'planning').length
         };
+        } catch (firebaseError) {
+          console.warn('Firebase failed, falling back to local data:', firebaseError);
+          // Fallback to local data
+          const { realProjects, industryStats } = await import('./data/realProjects');
+          projects = realProjects;
+          stats = industryStats;
+          summary = {
+            total: realProjects.length,
+            active: realProjects.filter(p => p.status === 'in-progress').length,
+            completed: realProjects.filter(p => p.status === 'completed').length,
+            testing: realProjects.filter(p => p.status === 'testing').length,
+            planning: realProjects.filter(p => p.status === 'planning').length
+          };
+        }
       } else {
         // Use local data as fallback
         const { realProjects, industryStats } = await import('./data/realProjects');
@@ -81,9 +77,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/projects/analytics', async (req, res) => {
     try {
       if (firebaseStorage) {
-        // Use Firebase analytics
-        const analytics = await firebaseStorage.getAnalytics();
-        res.json(analytics);
+        try {
+          // Use Firebase analytics
+          const analytics = await firebaseStorage.getAnalytics();
+          res.json(analytics);
+        } catch (firebaseError) {
+          console.warn('Firebase analytics failed, falling back to local data:', firebaseError);
+          // Fallback to local analytics calculation
+          const { realProjects } = await import('./data/realProjects');
+          
+          const industryBreakdown = realProjects.reduce((acc, project) => {
+            acc[project.industry] = (acc[project.industry] || 0) + 1;
+            return acc;
+          }, {} as Record<string, number>);
+
+          const budgetAnalysis = realProjects.map(p => ({
+            name: p.name.substring(0, 15) + '...',
+            estimated: p.budget,
+            actual: p.actualCost,
+            efficiency: Math.round((p.actualCost / p.budget) * 100)
+          }));
+
+          const timelineData = realProjects.map(p => {
+            const start = new Date(p.startDate);
+            const end = new Date(p.endDate);
+            const duration = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+            return {
+              name: p.name.substring(0, 20),
+              duration,
+              progress: p.progress,
+              industry: p.industry
+            };
+          });
+
+          res.json({
+            industryBreakdown,
+            budgetAnalysis,
+            timelineData,
+            summary: {
+              totalBudget: realProjects.reduce((sum, p) => sum + p.budget, 0),
+              totalActualCost: realProjects.reduce((sum, p) => sum + p.actualCost, 0),
+              avgTeamSize: Math.round(realProjects.reduce((sum, p) => sum + p.teamSize, 0) / realProjects.length),
+              avgProgress: Math.round(realProjects.reduce((sum, p) => sum + p.progress, 0) / realProjects.length)
+            }
+          });
+        }
       } else {
         // Use local data as fallback
         const { realProjects } = await import('./data/realProjects');

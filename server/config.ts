@@ -1,7 +1,7 @@
 // Configuration for storage backend
 export const config = {
   // Set to 'firebase' to use Firebase, 'memory' for in-memory storage, 'postgres' for PostgreSQL
-  storageType: process.env.STORAGE_TYPE || 'firebase',
+  storageType: process.env.STORAGE_TYPE || 'memory',
   
   // Firebase configuration
   firebase: {
