@@ -79,10 +79,6 @@ export default function Header() {
                 <Settings className="w-4 h-4" />
                 <span>Reports</span>
               </Link>
-              <Link href="/firebase" className={`flex items-center space-x-2 ${isActive('/firebase') ? 'text-primary font-medium' : 'text-muted-foreground hover:text-foreground'}`}>
-                <BarChart3 className="w-4 h-4" />
-                <span>Firebase</span>
-              </Link>
             </nav>
           </div>
 

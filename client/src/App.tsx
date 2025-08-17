@@ -7,7 +7,6 @@ import Dashboard from "@/pages/dashboard";
 import Projects from "@/pages/projects";
 import Analytics from "@/pages/analytics";
 import Reports from "@/pages/reports";
-import Firebase from "@/pages/firebase";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -17,7 +16,6 @@ function Router() {
       <Route path="/projects" component={Projects} />
       <Route path="/analytics" component={Analytics} />
       <Route path="/reports" component={Reports} />
-      <Route path="/firebase" component={Firebase} />
       <Route component={NotFound} />
     </Switch>
   );
