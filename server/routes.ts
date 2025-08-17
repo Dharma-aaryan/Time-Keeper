@@ -2,17 +2,6 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 
-import { setupAuth, isAuthenticated } from "./replitAuth";
-
-import {
-  insertClientSchema,
-  insertProjectSchema,
-  insertTimeEntrySchema,
-  insertTimeOffRequestSchema,
-  insertNotificationSchema,
-} from "@shared/schema";
-import { z } from "zod";
-
 console.log('Using local storage for project data');
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -87,8 +76,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-
-
   // Manual project creation endpoint
   app.post('/api/projects/manual', async (req, res) => {
     try {
@@ -129,10 +116,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-
-
-  // Client routes
-  app.get('/api/clients', isAuthenticated, async (req, res) => {
+  // Simplified client routes
+  app.get('/api/clients', async (req, res) => {
     try {
       const clients = await storage.getClients();
       res.json(clients);
@@ -142,10 +127,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/clients', isAuthenticated, async (req, res) => {
+  app.post('/api/clients', async (req, res) => {
     try {
-      const validatedData = insertClientSchema.parse(req.body);
-      const client = await storage.createClient(validatedData);
+      const client = await storage.createClient(req.body);
       res.json(client);
     } catch (error) {
       console.error("Error creating client:", error);
@@ -153,11 +137,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Project routes
-  app.get('/api/projects', isAuthenticated, async (req: any, res) => {
+  // Simplified project routes
+  app.get('/api/projects', async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const projects = await storage.getProjectsByUser(userId);
+      const projects = await storage.getProjects();
       res.json(projects);
     } catch (error) {
       console.error("Error fetching projects:", error);
@@ -165,34 +148,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/projects', isAuthenticated, async (req, res) => {
+  // Simplified time entry routes
+  app.get('/api/time-entries', async (req, res) => {
     try {
-      const validatedData = insertProjectSchema.parse(req.body);
-      const project = await storage.createProject(validatedData);
-      res.json(project);
-    } catch (error) {
-      console.error("Error creating project:", error);
-      res.status(400).json({ message: "Failed to create project" });
-    }
-  });
-
-  // Time entry routes
-  app.get('/api/time-entries', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { startDate, endDate } = req.query;
-      
-      let timeEntries;
-      if (startDate && endDate) {
-        timeEntries = await storage.getTimeEntriesByDateRange(
-          userId,
-          new Date(startDate as string),
-          new Date(endDate as string)
-        );
-      } else {
-        timeEntries = await storage.getTimeEntries(userId);
-      }
-      
+      const userId = 'demo-user'; // Demo user for local development
+      const timeEntries = await storage.getTimeEntries(userId);
       res.json(timeEntries);
     } catch (error) {
       console.error("Error fetching time entries:", error);
@@ -200,127 +160,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/time-entries', isAuthenticated, async (req: any, res) => {
+  app.post('/api/time-entries', async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const validatedData = insertTimeEntrySchema.parse({
+      const userId = 'demo-user'; // Demo user for local development
+      const timeEntry = await storage.createTimeEntry({
         ...req.body,
         userId,
       });
-      const timeEntry = await storage.createTimeEntry(validatedData);
       res.json(timeEntry);
     } catch (error) {
       console.error("Error creating time entry:", error);
       res.status(400).json({ message: "Failed to create time entry" });
-    }
-  });
-
-  app.put('/api/time-entries/:id', isAuthenticated, async (req, res) => {
-    try {
-      const { id } = req.params;
-      const validatedData = insertTimeEntrySchema.partial().parse(req.body);
-      const timeEntry = await storage.updateTimeEntry(id, validatedData);
-      res.json(timeEntry);
-    } catch (error) {
-      console.error("Error updating time entry:", error);
-      res.status(400).json({ message: "Failed to update time entry" });
-    }
-  });
-
-  app.delete('/api/time-entries/:id', isAuthenticated, async (req, res) => {
-    try {
-      const { id } = req.params;
-      await storage.deleteTimeEntry(id);
-      res.json({ success: true });
-    } catch (error) {
-      console.error("Error deleting time entry:", error);
-      res.status(500).json({ message: "Failed to delete time entry" });
-    }
-  });
-
-  app.post('/api/time-entries/:id/approve', isAuthenticated, async (req: any, res) => {
-    try {
-      const { id } = req.params;
-      const approverId = req.user.claims.sub;
-      const timeEntry = await storage.approveTimeEntry(id, approverId);
-      res.json(timeEntry);
-    } catch (error) {
-      console.error("Error approving time entry:", error);
-      res.status(500).json({ message: "Failed to approve time entry" });
-    }
-  });
-
-  app.post('/api/time-entries/:id/reject', isAuthenticated, async (req: any, res) => {
-    try {
-      const { id } = req.params;
-      const approverId = req.user.claims.sub;
-      const timeEntry = await storage.rejectTimeEntry(id, approverId);
-      res.json(timeEntry);
-    } catch (error) {
-      console.error("Error rejecting time entry:", error);
-      res.status(500).json({ message: "Failed to reject time entry" });
-    }
-  });
-
-  // Time off routes
-  app.get('/api/time-off-requests', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const requests = await storage.getTimeOffRequests(userId);
-      res.json(requests);
-    } catch (error) {
-      console.error("Error fetching time off requests:", error);
-      res.status(500).json({ message: "Failed to fetch time off requests" });
-    }
-  });
-
-  app.post('/api/time-off-requests', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const validatedData = insertTimeOffRequestSchema.parse({
-        ...req.body,
-        userId,
-      });
-      const request = await storage.createTimeOffRequest(validatedData);
-      res.json(request);
-    } catch (error) {
-      console.error("Error creating time off request:", error);
-      res.status(400).json({ message: "Failed to create time off request" });
-    }
-  });
-
-  // Notification routes
-  app.get('/api/notifications', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const notifications = await storage.getNotifications(userId);
-      res.json(notifications);
-    } catch (error) {
-      console.error("Error fetching notifications:", error);
-      res.status(500).json({ message: "Failed to fetch notifications" });
-    }
-  });
-
-  app.post('/api/notifications/:id/read', isAuthenticated, async (req, res) => {
-    try {
-      const { id } = req.params;
-      await storage.markNotificationAsRead(id);
-      res.json({ success: true });
-    } catch (error) {
-      console.error("Error marking notification as read:", error);
-      res.status(500).json({ message: "Failed to mark notification as read" });
-    }
-  });
-
-  // Analytics routes
-  app.get('/api/stats', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const stats = await storage.getUserStats(userId);
-      res.json(stats);
-    } catch (error) {
-      console.error("Error fetching stats:", error);
-      res.status(500).json({ message: "Failed to fetch stats" });
     }
   });
 
